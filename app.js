@@ -4,27 +4,22 @@ function toggleMenu(){
     document.getElementById("sidebar")
     .classList.toggle("active");
 }
-referredBy = "SHUBH1411";
-
 function generateReferralCode(name){
 
-    let firstPart = name
-        .substring(0,4)
+    let cleanName = name
+        .replace(/[^a-zA-Z]/g, "")
         .toUpperCase();
 
+    let firstPart = cleanName.substring(0,5);
+
     let randomPart = Math.floor(
-        1000 + Math.random() * 9000
+        100 + Math.random() * 900
     );
 
     return firstPart + randomPart;
 }
+const fullName = document.getElementById("fullName").value;
 
-const OWNER_REFERRAL = "SHUBH1411";
+const referralCode = generateReferralCode(fullName);
 
-if(referralInput === "SHUBH1411"){
-
-    newUserCoins += 100;
-
-    ownerCoins += 50;
-
-}
+console.log(referralCode);
