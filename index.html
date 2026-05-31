@@ -17,5 +17,41 @@
 
     <script src="app.js"></script>
 
-</body>
-</html>
+<nav class="navbar">
+    <h2>CoinTube</h2>
+
+    <div class="menu">
+        <a href="#">Dashboard</a>
+        <a href="#">Tasks</a>
+        <a href="#">Referral</a>
+        <a href="#">Leaderboard</a>
+        <a href="#">Withdraw</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="card">
+        <h3>Total Coins</h3>
+        <h1 id="coins">0</h1>
+    </div>
+
+    <div class="card">
+        <h3>Team Members</h3>
+        <h1>0</h1>
+    </div>
+
+    <div class="card">
+        <h3>Total Earnings</h3>
+        <h1>₹0</h1>
+    </div>
+
+</div>
+
+<div class="task-box">
+    <h2>Today's Tasks</h2>
+
+    <button onclick="earnCoins()">
+        Watch Video (+10 Coins)
+    </button>
+</div>
