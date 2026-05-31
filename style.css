@@ -1,23 +1,50 @@
 body{
-    background:black;
+    margin:0;
+    background:#050505;
     color:white;
-    text-align:center;
-    font-family:Arial;
+    font-family:Arial,sans-serif;
+}
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 50px;
+    background:#111;
+}
+
+.menu a{
+    color:white;
+    text-decoration:none;
+    margin-left:20px;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    padding:40px;
 }
 
 .card{
-    background:#111;
-    width:300px;
-    margin:auto;
+    background:#121212;
+    border:1px solid #7b2cff;
+    border-radius:15px;
     padding:20px;
+}
+
+.task-box{
+    margin:40px;
+    background:#121212;
+    padding:30px;
     border-radius:15px;
 }
 
 button{
-    background:purple;
+    background:#7b2cff;
     color:white;
     border:none;
-    padding:10px 20px;
+    padding:12px 25px;
     border-radius:10px;
     cursor:pointer;
 }
