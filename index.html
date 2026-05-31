@@ -1,43 +1,57 @@
-<nav class="navbar">
-    <h2>CoinTube</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinTube</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <button class="menu-btn" onclick="toggleMenu()">
-        ☰
-    </button>
-</nav>
+    <nav class="navbar">
+        <h2>CoinTube</h2>
 
-<div id="sidebar" class="sidebar">
-    <a href="index.html">🏠 Home</a>
-    <a href="dashboard.html">📊 Dashboard</a>
-    <a href="referral.html">👥 Referral</a>
-    <a href="leaderboard.html">🏆 Leaderboard</a>
-    <a href="withdraw.html">💰 Withdraw</a>
-</div>
-</nav>
+        <button class="menu-btn" onclick="toggleMenu()">
+            ☰
+        </button>
+    </nav>
 
-<div class="container">
-
-    <div class="card">
-        <h3>Total Coins</h3>
-        <h1 id="coins">0</h1>
+    <div id="sidebar" class="sidebar">
+        <a href="index.html">🏠 Home</a>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="referral.html">👥 Referral</a>
+        <a href="leaderboard.html">🏆 Leaderboard</a>
+        <a href="withdraw.html">💰 Withdraw</a>
     </div>
 
-    <div class="card">
-        <h3>Team Members</h3>
-        <h1>0</h1>
+    <div class="hero">
+        <h1>Welcome to CoinTube</h1>
+        <p>Complete tasks and earn coins.</p>
     </div>
 
-    <div class="card">
-        <h3>Total Earnings</h3>
-        <h1>₹0</h1>
+    <div class="task-box">
+        <h2>Today's Tasks</h2>
+
+        <div class="task-card">
+            <h3>Watch Video</h3>
+            <p>Reward: 10 Coins</p>
+
+            <button onclick="earnCoins()">
+                Watch Video (+10 Coins)
+            </button>
+        </div>
+
+        <div class="task-card">
+            <h3>Daily Check-In</h3>
+            <p>Reward: 20 Coins</p>
+
+            <button>
+                Claim Reward
+            </button>
+        </div>
     </div>
 
-</div>
+    <script src="app.js"></script>
 
-<div class="task-box">
-    <h2>Today's Tasks</h2>
-
-    <button onclick="earnCoins()">
-        Watch Video (+10 Coins)
-    </button>
-</div>
+</body>
+</html>
