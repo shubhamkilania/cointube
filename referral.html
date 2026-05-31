@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Referral - CoinTube</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <nav class="navbar">
-<div class="logo">CoinTube</div>
+    <div class="logo">CoinTube</div>
 
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <button class="menu-btn" onclick="toggleMenu()">
+        ☰
+    </button>
 </nav>
 
 <div id="sidebar" class="sidebar">
@@ -22,31 +27,35 @@
 </div>
 
 <div class="page-title">
-<h1>👥 Referral Program</h1>
+    <h1>👥 Referral Program</h1>
 </div>
 
 <div class="card">
+    <h3>Your Referral Code</h3>
 
-<h3>Owner Referral Code</h3>
+    <h2 id="myReferralCode">
+        Loading...
+    </h2>
 
-<h2>
-SHUB1411
-</h2>
-
-</div>
-
-<button>
-Copy Code
-</button>
-
+    <button onclick="copyReferralCode()">
+        Copy Code
+    </button>
 </div>
 
 <div class="card">
+    <h3>Owner Referral Code</h3>
 
-<h3>Total Team Members</h3>
+    <h2>
+        SHUB1411
+    </h2>
+</div>
 
-<h1>0</h1>
+<div class="card">
+    <h3>Total Team Members</h3>
 
+    <h1 id="teamCount">
+        0
+    </h1>
 </div>
 
 <script src="app.js"></script>
