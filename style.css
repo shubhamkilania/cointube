@@ -92,3 +92,10 @@ button{
 button:hover{
     opacity:0.9;
 }
+.logo{
+    font-size:42px;
+    font-weight:900;
+    background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
