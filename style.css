@@ -99,3 +99,21 @@ button:hover{
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
+.page-title{
+    text-align:center;
+    padding:30px;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+}
