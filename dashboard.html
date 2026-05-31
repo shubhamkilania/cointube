@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - CoinTube</title>
+<link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<nav class="navbar">
+    <div class="logo">CoinTube</div>
+
+    <button class="menu-btn" onclick="toggleMenu()">
+        ☰
+    </button>
+</nav>
+
+<div id="sidebar" class="sidebar">
+    <a href="index.html">🏠 Home</a>
+    <a href="dashboard.html">📊 Dashboard</a>
+    <a href="referral.html">👥 Referral</a>
+    <a href="leaderboard.html">🏆 Leaderboard</a>
+    <a href="withdraw.html">💰 Withdraw</a>
+</div>
+
+<div class="page-title">
+    <h1>📊 Dashboard</h1>
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="card">
+        <h3>Total Coins</h3>
+        <h1 id="coins">0</h1>
+    </div>
+
+    <div class="card">
+        <h3>Total Earnings</h3>
+        <h1>₹0</h1>
+    </div>
+
+    <div class="card">
+        <h3>Tasks Completed</h3>
+        <h1>0</h1>
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
