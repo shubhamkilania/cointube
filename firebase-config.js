@@ -24,14 +24,11 @@ const firebaseConfig = {
   measurementId: "G-DLW9DDEKM0"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Services
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Export everything needed
 export {
   app,
   auth,
@@ -41,6 +38,7 @@ export {
   doc,
   setDoc,
   getDoc
+};
 };
   getDoc
 };
