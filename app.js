@@ -1,7 +1,9 @@
 import {
   auth,
   RecaptchaVerifier,
-  signInWithPhoneNumber
+  signInWithPhoneNumber,
+  doc,
+  setDoc
 } from "./firebase-config.js";
 
 let confirmationResult;
@@ -15,32 +17,32 @@ function status(msg, color = "#bbb") {
   }
 }
 
-/* ---------------- SAFE RECAPTCHA INIT ---------------- */
+/* ---------------- INIT RECAPTCHA (FIXED SAFE VERSION) ---------------- */
 function initRecaptcha() {
   if (window.recaptchaVerifier) return;
 
   window.recaptchaVerifier = new RecaptchaVerifier(
-    auth,
     "recaptcha-container",
     {
       size: "invisible",
       callback: () => {
         console.log("reCAPTCHA solved");
       }
-    }
+    },
+    auth
   );
 
   window.recaptchaVerifier.render();
 }
 
-/* wait until DOM fully ready */
+/* run after page load */
 document.addEventListener("DOMContentLoaded", () => {
   initRecaptcha();
 });
 
 /* ---------------- SEND OTP ---------------- */
 document.getElementById("sendOtpBtn").addEventListener("click", async () => {
-  const phone = document.getElementById("phoneNumber").value;
+  const phone = document.getElementById("phoneNumber").value.trim();
 
   if (!phone) {
     status("Enter phone number", "red");
@@ -50,7 +52,9 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
   try {
     status("Sending OTP...", "#00b7ff");
 
-    if (!window.recaptchaVerifier) {
+    const appVerifier = window.recaptchaVerifier;
+
+    if (!appVerifier) {
       status("reCAPTCHA not ready, refresh page", "red");
       return;
     }
@@ -58,7 +62,7 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
     confirmationResult = await signInWithPhoneNumber(
       auth,
       phone,
-      window.recaptchaVerifier
+      appVerifier
     );
 
     window.confirmationResult = confirmationResult;
@@ -71,12 +75,22 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
   }
 });
 
-/* ---------------- VERIFY OTP ---------------- */
+/* ---------------- VERIFY OTP + REGISTER USER ---------------- */
 document.getElementById("verifyBtn").addEventListener("click", async () => {
+
   const otp = document.getElementById("otpCode").value;
+  const password = document.getElementById("password").value;
+  const phone = document.getElementById("phoneNumber").value;
+  const fullName = document.getElementById("fullName").value;
+  const referral = document.getElementById("referralCode").value;
 
   if (!otp) {
     status("Enter OTP", "red");
+    return;
+  }
+
+  if (!password) {
+    status("Set password", "red");
     return;
   }
 
@@ -86,16 +100,35 @@ document.getElementById("verifyBtn").addEventListener("click", async () => {
   }
 
   try {
+
+    // verify OTP
     const result = await window.confirmationResult.confirm(otp);
 
-    status("Login Successful 🎉", "#00ff99");
+    const user = result.user;
+
+    status("Saving user...", "#00b7ff");
+
+    // save user in Firestore
+    await setDoc(doc(db, "users", phone), {
+      fullName: fullName,
+      phone: phone,
+      password: password,
+      referral: referral || null,
+      uid: user.uid,
+      createdAt: new Date()
+    });
+
+    status("Registered Successfully 🎉", "#00ff99");
 
     localStorage.setItem("userLoggedIn", "true");
 
-    window.location.href = "home.html";
+    setTimeout(() => {
+      window.location.href = "home.html";
+    }, 1000);
 
   } catch (err) {
     console.error(err);
-    status("Wrong OTP ❌", "red");
+    status(err.message, "red");
   }
+
 });
