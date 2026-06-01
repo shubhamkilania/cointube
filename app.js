@@ -1,5 +1,6 @@
 import {
   auth,
+  db,
   RecaptchaVerifier,
   signInWithPhoneNumber,
   doc,
