@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoinTube - Home</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+}
+
+/* NAVBAR */
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 20px;
+    background:#111;
+    border-bottom:1px solid #7b2cff;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:900;
+    background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.menu-btn{
+    background:#7b2cff;
+    border:none;
+    padding:8px 12px;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* SIDEBAR */
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-250px;
+    width:220px;
+    height:100%;
+    background:#111;
+    padding:20px;
+    transition:0.3s;
+    border-right:1px solid #7b2cff;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    margin:15px 0;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+/* MAIN */
+.container{
+    padding:20px;
+}
+
+.card{
+    background:#111;
+    padding:20px;
+    margin:15px 0;
+    border-radius:15px;
+    border:1px solid #7b2cff;
+}
+
+button{
+    padding:10px 15px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg,#7b2cff,#a855f7);
+    color:white;
+    cursor:pointer;
+}
+
+.coin-box{
+    font-size:24px;
+    font-weight:bold;
+    color:#00ff99;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="navbar">
+    <div class="logo">CoinTube</div>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar" class="sidebar">
+    <a href="home.html">🏠 Home</a>
+    <a href="#">📊 Dashboard</a>
+    <a href="#">👥 Referral</a>
+    <a href="#">🏆 Leaderboard</a>
+    <a href="login.html" onclick="logout()">🚪 Logout</a>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <h2 id="welcome">Welcome User 👋</h2>
+
+    <div class="card">
+        <h3>Your Coins 💰</h3>
+        <div class="coin-box" id="coins">0</div>
+    </div>
+
+    <div class="card">
+        <h3>Watch Video</h3>
+        <p>Earn 10 coins per video</p>
+        <button onclick="watchVideo()">Watch Video</button>
+    </div>
+
+    <div class="card">
+        <h3>Daily Check-in</h3>
+        <p>Earn 20 coins daily</p>
+        <button onclick="dailyCheckin()">Claim Reward</button>
+    </div>
+
+</div>
+
+<script>
+/* ---------------- LOGIN CHECK ---------------- */
+if (!localStorage.getItem("userLoggedIn")) {
+    window.location.href = "login.html";
+}
+
+/* ---------------- SIDEBAR ---------------- */
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("active");
+}
+
+/* ---------------- COINS SYSTEM ---------------- */
+let coins = parseInt(localStorage.getItem("coins")) || 0;
+
+document.getElementById("coins").innerText = coins;
+
+function updateCoins(amount){
+    coins += amount;
+    localStorage.setItem("coins", coins);
+    document.getElementById("coins").innerText = coins;
+}
+
+/* ---------------- TASKS ---------------- */
+function watchVideo(){
+    updateCoins(10);
+    alert("+10 Coins Added 🎉");
+}
+
+function dailyCheckin(){
+    updateCoins(20);
+    alert("Daily Reward Claimed 🎉");
+}
+
+/* ---------------- LOGOUT ---------------- */
+function logout(){
+    localStorage.removeItem("userLoggedIn");
+}
+</script>
+
+</body>
+</html>
