@@ -17,25 +17,25 @@ function status(msg, color = "#bbb") {
   }
 }
 
-/* ---------------- INIT RECAPTCHA (FIXED SAFE VERSION) ---------------- */
+/* ---------------- RECAPTCHA FIX (IMPORTANT) ---------------- */
 function initRecaptcha() {
   if (window.recaptchaVerifier) return;
 
   window.recaptchaVerifier = new RecaptchaVerifier(
+    auth,
     "recaptcha-container",
     {
       size: "invisible",
       callback: () => {
         console.log("reCAPTCHA solved");
       }
-    },
-    auth
+    }
   );
 
   window.recaptchaVerifier.render();
 }
 
-/* run after page load */
+/* run after DOM ready */
 document.addEventListener("DOMContentLoaded", () => {
   initRecaptcha();
 });
@@ -52,9 +52,7 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
   try {
     status("Sending OTP...", "#00b7ff");
 
-    const appVerifier = window.recaptchaVerifier;
-
-    if (!appVerifier) {
+    if (!window.recaptchaVerifier) {
       status("reCAPTCHA not ready, refresh page", "red");
       return;
     }
@@ -62,7 +60,7 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
     confirmationResult = await signInWithPhoneNumber(
       auth,
       phone,
-      appVerifier
+      window.recaptchaVerifier
     );
 
     window.confirmationResult = confirmationResult;
@@ -75,7 +73,7 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
   }
 });
 
-/* ---------------- VERIFY OTP + REGISTER USER ---------------- */
+/* ---------------- VERIFY OTP + REGISTER ---------------- */
 document.getElementById("verifyBtn").addEventListener("click", async () => {
 
   const otp = document.getElementById("otpCode").value;
@@ -108,7 +106,7 @@ document.getElementById("verifyBtn").addEventListener("click", async () => {
 
     status("Saving user...", "#00b7ff");
 
-    // save user in Firestore
+    // save to Firestore
     await setDoc(doc(db, "users", phone), {
       fullName: fullName,
       phone: phone,
