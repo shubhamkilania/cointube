@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Reset Password</title>
+</head>
+<body style="background:#050505;color:white;text-align:center;padding:50px;">
+
+<h2>Reset Password</h2>
+
+<input id="phone" placeholder="+91XXXXXXXXXX"><br><br>
+<input id="newPassword" type="password" placeholder="New Password"><br><br>
+
+<button onclick="resetPassword()">Reset</button>
+
+<script type="module">
+import { db, doc, updateDoc } from "./firebase-config.js";
+
+window.resetPassword = async () => {
+
+  const phone = document.getElementById("phone").value;
+  const newPassword = document.getElementById("newPassword").value;
+
+  if (!phone || !newPassword) {
+    alert("Fill all fields");
+    return;
+  }
+
+  try {
+    const ref = doc(db, "users", phone);
+
+    await updateDoc(ref, {
+      password: newPassword
+    });
+
+    alert("Password updated successfully 🎉");
+
+    window.location.href = "login.html";
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+
+};
+</script>
+
+</body>
+</html>
