@@ -1,66 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoinTube</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoinTube - Earn Coins Online</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+}
+
+/* HEADER */
+.header{
+    text-align:center;
+    padding:60px 20px 30px;
+}
+
+.logo{
+    font-size:48px;
+    font-weight:900;
+    background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.tagline{
+    margin-top:10px;
+    color:#bbb;
+    font-size:16px;
+}
+
+/* BUTTONS */
+.btn-container{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+    margin-top:25px;
+}
+
+.btn{
+    width:200px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.login{
+    background:#7b2cff;
+    color:white;
+}
+
+.register{
+    background:linear-gradient(90deg,#7b2cff,#a855f7);
+    color:white;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+    opacity:0.9;
+}
+
+/* ABOUT */
+.about{
+    max-width:500px;
+    margin:50px auto;
+    padding:20px;
+    background:#111;
+    border:1px solid #7b2cff;
+    border-radius:15px;
+    text-align:center;
+}
+
+.about h2{
+    margin-bottom:10px;
+    color:#fff;
+}
+
+.about p{
+    color:#bbb;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    color:#555;
+    font-size:12px;
+    margin-top:40px;
+    padding-bottom:30px;
+}
+</style>
 </head>
+
 <body>
 
-    <nav class="navbar">
+<div class="header">
+    <div class="logo">CoinTube</div>
+    <div class="tagline">Earn coins by watching videos & completing tasks</div>
 
-    <div class="logo">
-        CoinTube
+    <div class="btn-container">
+        <button class="btn login" onclick="goLogin()">Login</button>
+        <button class="btn register" onclick="goRegister()">Register</button>
     </div>
+</div>
 
-    <button class="menu-btn" onclick="toggleMenu()">
-        ☰
-    </button>
+<div class="about">
+    <h2>About CoinTube</h2>
+    <p>
+        CoinTube is a rewards platform where users can earn coins by watching videos, 
+        completing simple tasks, and referring friends. You can withdraw your rewards 
+        after reaching minimum balance.
+    </p>
+</div>
 
-</nav>
+<div class="footer">
+    © 2026 CoinTube. All rights reserved.
+</div>
 
-    <div id="sidebar" class="sidebar">
-        <a href="index.html">🏠 Home</a>
-        <a href="dashboard.html">📊 Dashboard</a>
-        <a href="referral.html">👥 Referral</a>
-        <a href="leaderboard.html">🏆 Leaderboard</a>
-        <a href="withdraw.html">💰 Withdraw</a>
-    </div>
+<script>
+function goLogin(){
+    window.location.href = "login.html";
+}
 
-    <div class="hero">
-        <h1>Welcome to CoinTube</h1>
-        <p>Complete tasks and earn coins.</p>
-    </div>
-
-    <div class="task-box">
-        <h2>Today's Tasks</h2>
-
-        <div class="task-card">
-            <h3>Watch Video</h3>
-            <p>Reward: 10 Coins</p>
-
-            <button onclick="earnCoins()">
-                Watch Video (+10 Coins)
-            </button>
-        </div>
-
-        <div class="task-card">
-            <h3>Daily Check-In</h3>
-            <p>Reward: 20 Coins</p>
-
-            <button>
-                Claim Reward
-            </button>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-
-    <script>
-window.location.href="login.html";
+function goRegister(){
+    window.location.href = "register.html";
+}
 </script>
-<script type="module" src="firebase-config.js"></script>
-    
+
 </body>
 </html>
