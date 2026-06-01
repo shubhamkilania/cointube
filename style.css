@@ -117,3 +117,32 @@ input{
     border:none;
     border-radius:10px;
 }
+.phone-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.phone-box input{
+    flex:1;
+    margin-bottom:0;
+}
+
+.otp-btn{
+    width:60px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(
+        90deg,
+        #7b2cff,
+        #a855f7
+    );
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.otp-btn:hover{
+    transform:scale(1.05);
+}
