@@ -39,6 +39,3 @@ export {
   setDoc,
   getDoc
 };
-};
-  getDoc
-};
