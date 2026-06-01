@@ -141,7 +141,9 @@ button{
 </div>
 
 <script>
-
+/* ---------------- LOGIN CHECK ---------------- */
+if (!localStorage.getItem("userLoggedIn")) {
+    window.location.href = "login.html";
 }
 
 /* ---------------- SIDEBAR ---------------- */
