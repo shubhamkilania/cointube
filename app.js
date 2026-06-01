@@ -15,26 +15,28 @@ function status(msg, color = "#bbb") {
   }
 }
 
-/* ---------------- INIT RECAPTCHA (FIXED) ---------------- */
-function setupRecaptcha() {
+/* ---------------- SAFE RECAPTCHA INIT ---------------- */
+function initRecaptcha() {
   if (window.recaptchaVerifier) return;
 
   window.recaptchaVerifier = new RecaptchaVerifier(
+    auth,
     "recaptcha-container",
     {
       size: "invisible",
       callback: () => {
-        console.log("reCAPTCHA verified");
+        console.log("reCAPTCHA solved");
       }
-    },
-    auth
+    }
   );
 
   window.recaptchaVerifier.render();
 }
 
-/* Run immediately (better than window.onload) */
-setupRecaptcha();
+/* wait until DOM fully ready */
+document.addEventListener("DOMContentLoaded", () => {
+  initRecaptcha();
+});
 
 /* ---------------- SEND OTP ---------------- */
 document.getElementById("sendOtpBtn").addEventListener("click", async () => {
@@ -48,9 +50,7 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
   try {
     status("Sending OTP...", "#00b7ff");
 
-    const appVerifier = window.recaptchaVerifier;
-
-    if (!appVerifier) {
+    if (!window.recaptchaVerifier) {
       status("reCAPTCHA not ready, refresh page", "red");
       return;
     }
@@ -58,7 +58,7 @@ document.getElementById("sendOtpBtn").addEventListener("click", async () => {
     confirmationResult = await signInWithPhoneNumber(
       auth,
       phone,
-      appVerifier
+      window.recaptchaVerifier
     );
 
     window.confirmationResult = confirmationResult;
@@ -90,12 +90,8 @@ document.getElementById("verifyBtn").addEventListener("click", async () => {
 
     status("Login Successful 🎉", "#00ff99");
 
-    console.log("User:", result.user);
-
-    // optional login state
     localStorage.setItem("userLoggedIn", "true");
 
-    // redirect
     window.location.href = "home.html";
 
   } catch (err) {
