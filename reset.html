@@ -1,46 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Reset Password</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reset Password - CoinTube</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#050505;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+}
+
+.reset-box{
+    width:400px;
+    background:#111;
+    padding:40px;
+    border-radius:20px;
+    border:1px solid #7b2cff;
+    box-shadow:0 0 25px rgba(123,44,255,.3);
+    text-align:center;
+}
+
+/* LOGO */
+.logo{
+    font-size:38px;
+    font-weight:900;
+    margin-bottom:10px;
+    background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* TITLE */
+h2{
+    margin-bottom:20px;
+    color:#ddd;
+    font-size:20px;
+}
+
+/* INPUTS */
+input{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:10px;
+    background:#1a1a1a;
+    color:white;
+    font-size:14px;
+}
+
+input:focus{
+    outline:1px solid #7b2cff;
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg,#7b2cff,#a855f7);
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+/* BACK LINK */
+a{
+    display:block;
+    margin-top:15px;
+    color:#00b7ff;
+    text-decoration:none;
+    font-size:14px;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+/* STATUS TEXT */
+#status{
+    margin-top:10px;
+    font-size:13px;
+    color:#bbb;
+}
+</style>
 </head>
-<body style="background:#050505;color:white;text-align:center;padding:50px;">
 
-<h2>Reset Password</h2>
+<body>
 
-<input id="phone" placeholder="+91XXXXXXXXXX"><br><br>
-<input id="newPassword" type="password" placeholder="New Password"><br><br>
+<div class="reset-box">
 
-<button onclick="resetPassword()">Reset</button>
+    <div class="logo">CoinTube</div>
+
+    <h2>Reset Your Password</h2>
+
+    <input id="phone" type="text" placeholder="+91XXXXXXXXXX">
+
+    <input id="newPassword" type="password" placeholder="New Password">
+
+    <button onclick="resetPassword()">Reset Password</button>
+
+    <div id="status"></div>
+
+    <a href="login.html">Back to Login</a>
+
+</div>
 
 <script type="module">
 import { db, doc, updateDoc } from "./firebase-config.js";
 
+function status(msg, color="#bbb"){
+    const el = document.getElementById("status");
+    el.innerText = msg;
+    el.style.color = color;
+}
+
 window.resetPassword = async () => {
 
-  const phone = document.getElementById("phone").value;
-  const newPassword = document.getElementById("newPassword").value;
+    const phone = document.getElementById("phone").value.trim();
+    const newPassword = document.getElementById("newPassword").value;
 
-  if (!phone || !newPassword) {
-    alert("Fill all fields");
-    return;
-  }
+    if (!phone || !newPassword) {
+        status("Fill all fields", "red");
+        return;
+    }
 
-  try {
-    const ref = doc(db, "users", phone);
+    try {
+        status("Updating password...", "#00b7ff");
 
-    await updateDoc(ref, {
-      password: newPassword
-    });
+        const ref = doc(db, "users", phone);
 
-    alert("Password updated successfully 🎉");
+        await updateDoc(ref, {
+            password: newPassword
+        });
 
-    window.location.href = "login.html";
+        status("Password updated successfully 🎉", "#00ff99");
 
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1200);
 
+    } catch (err) {
+        console.error(err);
+        status(err.message, "red");
+    }
 };
 </script>
 
