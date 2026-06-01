@@ -22,50 +22,39 @@ body{
     color:white;
 }
 
-.reset-box{
+.box{
     width:400px;
     background:#111;
     padding:40px;
     border-radius:20px;
     border:1px solid #7b2cff;
-    box-shadow:0 0 25px rgba(123,44,255,.3);
     text-align:center;
+    box-shadow:0 0 25px rgba(123,44,255,.3);
 }
 
-/* LOGO */
 .logo{
     font-size:38px;
     font-weight:900;
-    margin-bottom:10px;
+    margin-bottom:15px;
     background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
-/* TITLE */
-h2{
-    margin-bottom:20px;
-    color:#ddd;
-    font-size:20px;
-}
-
-/* INPUTS */
 input{
     width:100%;
     padding:14px;
-    margin-bottom:15px;
+    margin-bottom:12px;
     border:none;
     border-radius:10px;
     background:#1a1a1a;
     color:white;
-    font-size:14px;
 }
 
 input:focus{
     outline:1px solid #7b2cff;
 }
 
-/* BUTTON */
 button{
     width:100%;
     padding:14px;
@@ -73,29 +62,13 @@ button{
     border-radius:10px;
     background:linear-gradient(90deg,#7b2cff,#a855f7);
     color:white;
-    font-size:16px;
     cursor:pointer;
-    transition:0.2s;
 }
 
 button:hover{
     opacity:0.9;
 }
 
-/* BACK LINK */
-a{
-    display:block;
-    margin-top:15px;
-    color:#00b7ff;
-    text-decoration:none;
-    font-size:14px;
-}
-
-a:hover{
-    text-decoration:underline;
-}
-
-/* STATUS TEXT */
 #status{
     margin-top:10px;
     font-size:13px;
@@ -106,63 +79,120 @@ a:hover{
 
 <body>
 
-<div class="reset-box">
+<div class="box">
 
     <div class="logo">CoinTube</div>
 
-    <h2>Reset Your Password</h2>
+    <input id="phone" placeholder="+91XXXXXXXXXX">
 
-    <input id="phone" type="text" placeholder="+91XXXXXXXXXX">
+    <button id="sendOtpBtn">Send OTP</button>
+
+    <input id="otp" placeholder="Enter OTP">
 
     <input id="newPassword" type="password" placeholder="New Password">
 
-    <button onclick="resetPassword()">Reset Password</button>
+    <button id="resetBtn">Reset Password</button>
 
     <div id="status"></div>
 
-    <a href="login.html">Back to Login</a>
-
 </div>
 
-<script type="module">
-import { db, doc, updateDoc } from "./firebase-config.js";
+<div id="recaptcha-container"></div>
 
+<script type="module">
+import {
+  auth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  db,
+  doc,
+  updateDoc
+} from "./firebase-config.js";
+
+let confirmationResult;
+
+/* ---------------- STATUS ---------------- */
 function status(msg, color="#bbb"){
-    const el = document.getElementById("status");
-    el.innerText = msg;
-    el.style.color = color;
+  const el = document.getElementById("status");
+  el.innerText = msg;
+  el.style.color = color;
 }
 
-window.resetPassword = async () => {
+/* ---------------- RECAPTCHA ---------------- */
+window.recaptchaVerifier = new RecaptchaVerifier(
+  auth,
+  "recaptcha-container",
+  {
+    size: "invisible"
+  }
+);
 
-    const phone = document.getElementById("phone").value.trim();
-    const newPassword = document.getElementById("newPassword").value;
+recaptchaVerifier.render();
 
-    if (!phone || !newPassword) {
-        status("Fill all fields", "red");
-        return;
-    }
+/* ---------------- SEND OTP ---------------- */
+document.getElementById("sendOtpBtn").addEventListener("click", async () => {
 
-    try {
-        status("Updating password...", "#00b7ff");
+  const phone = document.getElementById("phone").value;
 
-        const ref = doc(db, "users", phone);
+  if (!phone) {
+    status("Enter phone number", "red");
+    return;
+  }
 
-        await updateDoc(ref, {
-            password: newPassword
-        });
+  try {
+    status("Sending OTP...", "#00b7ff");
 
-        status("Password updated successfully 🎉", "#00ff99");
+    confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phone,
+      window.recaptchaVerifier
+    );
 
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 1200);
+    status("OTP sent ✔", "#00ff99");
 
-    } catch (err) {
-        console.error(err);
-        status(err.message, "red");
-    }
-};
+  } catch (err) {
+    console.error(err);
+    status(err.message, "red");
+  }
+
+});
+
+/* ---------------- RESET PASSWORD ---------------- */
+document.getElementById("resetBtn").addEventListener("click", async () => {
+
+  const otp = document.getElementById("otp").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const phone = document.getElementById("phone").value;
+
+  if (!otp || !newPassword) {
+    status("Fill all fields", "red");
+    return;
+  }
+
+  try {
+
+    status("Verifying OTP...", "#00b7ff");
+
+    await confirmationResult.confirm(otp);
+
+    status("Updating password...", "#00b7ff");
+
+    await updateDoc(doc(db, "users", phone), {
+      password: newPassword
+    });
+
+    status("Password updated 🎉", "#00ff99");
+
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 1200);
+
+  } catch (err) {
+    console.error(err);
+    status(err.message, "red");
+  }
+
+});
 </script>
 
 </body>
