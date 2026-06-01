@@ -4,7 +4,9 @@ import {
   signInWithPhoneNumber
 } from "./firebase-config.js";
 
-// 🔵 Setup Recaptcha properly
+let timerInterval;
+
+// 🔵 Recaptcha setup
 window.onload = () => {
   window.recaptchaVerifier = new RecaptchaVerifier(
     "recaptcha-container",
@@ -15,60 +17,85 @@ window.onload = () => {
   );
 };
 
+// 📢 Status function
+function setStatus(msg, color = "#bbb") {
+  const el = document.getElementById("statusText");
+  if (el) {
+    el.innerText = msg;
+    el.style.color = color;
+  }
+}
+
+// ⏳ Timer function (60 sec)
+function startTimer(duration = 60) {
+  let time = duration;
+
+  const btn = document.getElementById("sendOtpBtn");
+  btn.disabled = true;
+
+  timerInterval = setInterval(() => {
+    setStatus(`Wait ${time}s before resending OTP`, "#ffcc00");
+
+    time--;
+
+    if (time < 0) {
+      clearInterval(timerInterval);
+      btn.disabled = false;
+      setStatus("You can resend OTP now", "#00ff99");
+    }
+  }, 1000);
+}
+
 // 📲 SEND OTP
-const sendOtpBtn = document.getElementById("sendOtpBtn");
+document.getElementById("sendOtpBtn").addEventListener("click", async () => {
+  const phoneNumber = document.getElementById("phoneNumber").value;
 
-if (sendOtpBtn) {
-  sendOtpBtn.addEventListener("click", async () => {
-    const phoneNumber =
-      document.getElementById("phoneNumber").value;
+  if (!phoneNumber) {
+    setStatus("Enter phone number", "red");
+    return;
+  }
 
-    if (!phoneNumber) {
-      alert("Enter phone number");
-      return;
-    }
+  try {
+    setStatus("Sending OTP...", "#00b7ff");
 
-    try {
-      const appVerifier = window.recaptchaVerifier;
+    const appVerifier = window.recaptchaVerifier;
 
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        appVerifier
-      );
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      appVerifier
+    );
 
-      window.confirmationResult = confirmationResult;
+    window.confirmationResult = confirmationResult;
 
-      alert("OTP Sent Successfully");
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-  });
-}
+    setStatus("OTP sent successfully ✔", "#00ff99");
 
-// ✅ VERIFY OTP (THIS WAS MISSING)
-const verifyBtn = document.getElementById("verifyBtn");
+    startTimer(60); // 🔥 start 60 sec timer
+  } catch (error) {
+    console.error(error);
+    setStatus(error.message, "red");
+  }
+});
 
-if (verifyBtn) {
-  verifyBtn.addEventListener("click", async () => {
-    const otp = document.getElementById("otpCode").value;
+// ✅ VERIFY OTP
+document.getElementById("verifyBtn").addEventListener("click", async () => {
+  const otp = document.getElementById("otpCode").value;
 
-    if (!otp) {
-      alert("Enter OTP");
-      return;
-    }
+  if (!otp) {
+    setStatus("Enter OTP", "red");
+    return;
+  }
 
-    try {
-      const result = await window.confirmationResult.confirm(otp);
+  try {
+    const result = await window.confirmationResult.confirm(otp);
 
-      alert("Registration Successful!");
-      console.log("User:", result.user);
-    } catch (error) {
-      console.error(error);
-      alert("Wrong OTP");
-    }
-  });
-}
+    setStatus("Verified Successfully 🎉", "#00ff99");
+
+    console.log("User:", result.user);
+  } catch (error) {
+    console.error(error);
+    setStatus("Wrong OTP ❌", "red");
+  }
+});
 
 }
