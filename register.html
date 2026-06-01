@@ -102,20 +102,24 @@ input:focus{
         Create Your Account
     </p>
 
-    <input id="fullName" type="text" placeholder="Full Name">
+  <input id="fullName" type="text" placeholder="Full Name">
 
-    <input id="phoneNumber" type="text" placeholder="Phone Number">
+<input id="phoneNumber" type="text" placeholder="+91XXXXXXXXXX">
 
-    <input id="password" type="password" placeholder="Password">
+<input id="referralCode" type="text" placeholder="Referral Code (Optional)">
 
-    <input id="confirmPassword" type="password" placeholder="Confirm Password">
+<button class="register-btn" id="sendOtpBtn">
+Send OTP
+</button>
 
-    <input id="referralCode" type="text" placeholder="Referral Code (Optional)">
+<input id="otpCode" type="text" placeholder="Enter OTP">
 
-    <button class="register-btn" onclick="registerUser()">
-        Register
-    </button>
+<button class="register-btn" id="verifyBtn">
+Verify & Register
+</button>
 
+<div id="recaptcha-container"></div>
+    
     <div class="login-link">
         Already have an account?
         <a href="login.html">Login</a>
