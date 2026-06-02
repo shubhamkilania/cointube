@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Referral - CoinTube</title>
+<title>Referral System - CoinTube</title>
 
 <style>
 
@@ -24,103 +24,109 @@ padding:25px;
 font-size:42px;
 font-weight:900;
 text-align:center;
-margin-bottom:30px;
-
-background:linear-gradient(
-90deg,
-#ffd700,
-#7b2cff
-);
-
+margin-bottom:25px;
+background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
 .container{
-max-width:900px;
+max-width:1000px;
 margin:auto;
 }
 
-.card{
-background:#111;
-border:1px solid #222;
+.hero{
+background:linear-gradient(135deg,#160026,#2f0057);
+padding:30px;
 border-radius:20px;
-padding:25px;
-margin-bottom:20px;
+text-align:center;
+margin-bottom:25px;
 }
 
-.title{
-font-size:24px;
+.hero h1{
+margin-bottom:10px;
+}
+
+.hero p{
+color:#ddd;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.card{
+background:#13131d;
+padding:25px;
+border-radius:18px;
+border:1px solid #222;
+}
+
+.card h3{
 margin-bottom:15px;
 color:#00b7ff;
 }
 
-.referral-box{
-display:flex;
-gap:10px;
-margin-top:15px;
+.card p{
+color:#aaa;
+line-height:1.6;
 }
 
-.referral-box input{
-flex:1;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#1a1a1a;
-color:white;
-font-size:16px;
+.referral-box{
+background:#111;
+padding:25px;
+border-radius:18px;
+border:1px solid #333;
+text-align:center;
+margin-bottom:25px;
+}
+
+.code{
+font-size:32px;
+font-weight:bold;
+color:#ffd700;
+margin:15px 0;
+letter-spacing:3px;
 }
 
 button{
-padding:14px 20px;
+padding:14px 25px;
 border:none;
 border-radius:12px;
 cursor:pointer;
-background:linear-gradient(
-90deg,
-#7b2cff,
-#a855f7
-);
-color:white;
 font-size:16px;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
+color:white;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
+button:hover{
+opacity:.9;
 }
 
-.stat-card{
-background:#151520;
+.notice{
+background:#111;
 padding:20px;
-border-radius:15px;
+border-radius:18px;
+border:1px solid #333;
 text-align:center;
 }
 
-.stat-card h2{
+.notice h2{
 color:#ffd700;
-margin-top:10px;
+margin-bottom:10px;
 }
 
-.reward{
-color:#00ff99;
-font-weight:bold;
-margin-top:10px;
+.notice p{
+color:#aaa;
+line-height:1.8;
 }
 
-.coming-soon{
-text-align:center;
-padding:25px;
-font-size:18px;
-border:1px dashed #7b2cff;
-border-radius:15px;
-color:#bbb;
-}
-
-.home-btn{
+.back{
+margin-top:20px;
 width:100%;
-margin-top:10px;
 }
 
 </style>
@@ -133,127 +139,93 @@ margin-top:10px;
 CoinTube
 </div>
 
-<div class="card">
+<div class="hero">
 
-<div class="title">
-👥 Your Referral Code
+<h1>👥 Referral Program</h1>
+
+<p>
+Invite friends and grow your earnings together.
+</p>
+
 </div>
 
-<p style="color:#aaa;">
-Invite friends and earn rewards together.
+<div class="grid">
+
+<div class="card">
+
+<h3>🎁 Referral Reward</h3>
+
+<p>
+Invite friends using your referral code.
+Earn rewards when they join CoinTube.
 </p>
+
+</div>
+
+<div class="card">
+
+<h3>🚀 More Rewards</h3>
+
+<p>
+Future updates will include referral bonuses,
+team rewards and special events.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>📈 Grow Faster</h3>
+
+<p>
+Build your network and increase your earnings
+with the upcoming referral system.
+</p>
+
+</div>
+
+</div>
 
 <div class="referral-box">
 
-<input
-id="refCode"
-value="COIN1234"
-readonly
->
+<h2>Your Referral Code</h2>
 
-<button onclick="copyCode()">
-Copy
+<div class="code">
+COMING SOON
+</div>
+
+<button>
+Generate Code
 </button>
 
 </div>
 
-</div>
+<div class="notice">
 
-<div class="stats">
+<h2>⚡ Coming Soon</h2>
 
-<div class="stat-card">
-<h3>Total Referrals</h3>
-<h2>0</h2>
-</div>
+<p>
+Referral System and Team System are currently under development.<br><br>
 
-<div class="stat-card">
-<h3>Coins Earned</h3>
-<h2>0</h2>
-</div>
-
-<div class="stat-card">
-<h3>Team Members</h3>
-<h2>0</h2>
-</div>
-
-</div>
-
-<br>
-
-<div class="card">
-
-<div class="title">
-🎁 Referral Rewards
-</div>
-
-<p class="reward">
-Invite a friend → +100 Coins
-</p>
-
-<p class="reward">
-Friend joins → +50 Coins Bonus
-</p>
-
-</div>
-
-<div class="card">
-
-<div class="title">
-🚀 Referral System
-</div>
-
-<div class="coming-soon">
-Referral System Coming Soon
+Soon you will be able to:
 <br><br>
-Users will soon be able to invite friends,
-track referrals and earn bonus rewards.
-</div>
 
-</div>
-
-<div class="card">
-
-<div class="title">
-👑 Team System
-</div>
-
-<div class="coming-soon">
-Team System Coming Soon
-<br><br>
-Build your team, increase earnings,
-unlock ranks and earn leadership rewards.
-</div>
+👥 Invite Friends<br>
+🏆 Earn Referral Rewards<br>
+💰 Get Bonus Coins<br>
+📊 Build Your Team<br>
+🚀 Unlock Team Earnings
+</p>
 
 </div>
 
 <button
-class="home-btn"
+class="back"
 onclick="location.href='home.html'">
-🏠 Back To Home
+🏠 Back Home
 </button>
 
 </div>
-
-<script>
-
-function copyCode(){
-
-const code =
-document.getElementById("refCode");
-
-code.select();
-
-navigator.clipboard.writeText(
-code.value
-);
-
-alert(
-"Referral Code Copied!"
-);
-
-}
-
-</script>
 
 </body>
 </html>
