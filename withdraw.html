@@ -21,7 +21,7 @@ padding:25px;
 }
 
 .container{
-max-width:900px;
+max-width:950px;
 margin:auto;
 }
 
@@ -30,37 +30,40 @@ text-align:center;
 font-size:45px;
 font-weight:900;
 margin-bottom:25px;
-
-background:linear-gradient(
-90deg,
-#ffd700,
-#7b2cff
-);
-
+background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-.balance-box{
-background:linear-gradient(
-135deg,
-#160026,
-#2f0057
-);
+.balance-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+margin-bottom:25px;
+}
 
+.balance-box{
+background:linear-gradient(135deg,#160026,#2f0057);
 padding:25px;
 border-radius:20px;
 text-align:center;
-margin-bottom:25px;
 }
 
 .balance-box h2{
 margin-bottom:10px;
+color:#ddd;
 }
 
 .balance-box h1{
-font-size:50px;
+font-size:45px;
+}
+
+.coin-value{
 color:#ffd700;
+}
+
+.money-value{
+color:#00ff99;
 }
 
 .card{
@@ -72,8 +75,8 @@ margin-bottom:25px;
 }
 
 .card h2{
-margin-bottom:15px;
 color:#00b7ff;
+margin-bottom:15px;
 }
 
 .notice{
@@ -89,7 +92,6 @@ border:none;
 border-radius:12px;
 background:#1c1c28;
 color:white;
-font-size:15px;
 }
 
 input:focus{
@@ -103,14 +105,9 @@ border:none;
 border-radius:12px;
 cursor:pointer;
 font-size:16px;
-
-background:linear-gradient(
-90deg,
-#7b2cff,
-#a855f7
-);
-
+background:linear-gradient(90deg,#7b2cff,#a855f7);
 color:white;
+margin-bottom:10px;
 }
 
 button:hover{
@@ -131,15 +128,13 @@ font-weight:bold;
 margin-bottom:10px;
 }
 
-.back-btn{
-margin-top:15px;
-background:#222;
+.empty{
+text-align:center;
+color:#888;
 }
 
-.empty{
-color:#888;
-text-align:center;
-padding:10px;
+.back-btn{
+background:#222;
 }
 
 </style>
@@ -152,39 +147,58 @@ padding:10px;
 CoinTube
 </div>
 
+<div class="balance-grid">
+
 <div class="balance-box">
+<h2>💰 Coins</h2>
+<h1 class="coin-value" id="coinBalance">0</h1>
+</div>
 
-<h2>💰 Available Coins</h2>
-
-<h1 id="coinBalance">
-0
-</h1>
+<div class="balance-box">
+<h2>₹ Money</h2>
+<h1 class="money-value" id="moneyBalance">0</h1>
+</div>
 
 </div>
 
 <div class="card">
 
-<h2>Withdraw Coins</h2>
+<h2>🔄 Convert Coins To Money</h2>
 
 <p class="notice">
-Minimum withdrawal amount is <b>500 Coins</b>.
+100 Coins = ₹1
+</p>
+
+<br>
+
+<button onclick="convertCoins()">
+Convert Coins
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>💸 Withdraw Money</h2>
+
+<p class="notice">
+Minimum withdrawal: 1000 Coins (₹10)
 </p>
 
 <br>
 
 <input
 id="upi"
-type="text"
-placeholder="Enter UPI ID (example@upi)"
+placeholder="Enter UPI ID"
 >
 
 <input
 id="amount"
 type="number"
-placeholder="Enter Coins Amount"
+placeholder="Enter Amount in ₹"
 >
 
-<button onclick="withdrawCoins()">
+<button onclick="withdrawMoney()">
 Request Withdraw
 </button>
 
@@ -209,20 +223,8 @@ No withdrawal requests yet.
 <h2>⚠ Important Notice</h2>
 
 <p class="notice">
-
-Withdrawals are currently in development.
-
-For now, requests are stored locally on your device.
-
-Future updates will support:
-
-<br><br>
-
-✅ Real UPI Payments<br>
-✅ Bank Transfers<br>
-✅ Automatic Withdrawals<br>
-✅ Payment Status Tracking
-
+Withdrawals are currently stored locally.
+Real payments and automatic payouts will be added in future updates.
 </p>
 
 </div>
@@ -238,26 +240,73 @@ onclick="location.href='home.html'">
 <script>
 
 let coins =
-parseInt(
-localStorage.getItem("coins")
-) || 0;
+parseInt(localStorage.getItem("coins")) || 0;
+
+let money =
+parseFloat(localStorage.getItem("money")) || 0;
+
+updateBalances();
+loadHistory();
+
+function updateBalances(){
 
 document.getElementById(
 "coinBalance"
 ).innerText = coins;
 
-loadHistory();
+document.getElementById(
+"moneyBalance"
+).innerText = "₹" + money.toFixed(2);
 
-function withdrawCoins(){
+}
+
+function convertCoins(){
+
+if(coins < 100){
+
+alert(
+"Need at least 100 coins"
+);
+
+return;
+}
+
+const converted =
+Math.floor(coins / 100);
+
+coins =
+coins - (converted * 100);
+
+money =
+money + converted;
+
+localStorage.setItem(
+"coins",
+coins
+);
+
+localStorage.setItem(
+"money",
+money
+);
+
+updateBalances();
+
+alert(
+"Converted ₹" + converted
+);
+
+}
+
+function withdrawMoney(){
 
 const upi =
 document.getElementById("upi")
 .value.trim();
 
 const amount =
-parseInt(
-document.getElementById("amount")
-.value
+parseFloat(
+document.getElementById("amount").value
 );
 
 if(!upi){
@@ -274,30 +323,21 @@ return;
 
 }
 
-if(amount < 500){
+if(amount > money){
 
-alert("Minimum withdrawal is 500 Coins");
+alert("Not enough money balance");
 return;
 
 }
 
-if(amount > coins){
-
-alert("Not enough coins");
-return;
-
-}
-
-coins -= amount;
+money -= amount;
 
 localStorage.setItem(
-"coins",
-coins
+"money",
+money
 );
 
-document.getElementById(
-"coinBalance"
-).innerText = coins;
+updateBalances();
 
 let history =
 JSON.parse(
@@ -323,7 +363,9 @@ JSON.stringify(history)
 document.getElementById("upi").value = "";
 document.getElementById("amount").value = "";
 
-alert("Withdrawal Request Submitted");
+alert(
+"Withdrawal Request Submitted"
+);
 
 loadHistory();
 
@@ -332,9 +374,7 @@ loadHistory();
 function loadHistory(){
 
 const historyDiv =
-document.getElementById(
-"history"
-);
+document.getElementById("history");
 
 let history =
 JSON.parse(
@@ -345,11 +385,8 @@ localStorage.getItem(
 
 if(history.length === 0){
 
-historyDiv.innerHTML = `
-<div class="empty">
-No withdrawal requests yet.
-</div>
-`;
+historyDiv.innerHTML =
+'<div class="empty">No withdrawal requests yet.</div>';
 
 return;
 
@@ -367,7 +404,7 @@ historyDiv.innerHTML += `
 🟡 ${item.status}
 </div>
 
-💰 ${item.amount} Coins
+💸 ₹${item.amount}
 
 <br><br>
 
