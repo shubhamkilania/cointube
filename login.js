@@ -1,42 +1,89 @@
-import { db, doc, getDoc } from "./firebase-config.js";
+import {
+auth,
+signInWithEmailAndPassword
+} from "./firebase-config.js";
 
-document.querySelector(".login-btn").addEventListener("click", async () => {
+function status(msg, color = "#bbb") {
+const el = document.getElementById("statusText");
 
-  const phone = document.getElementById("phone").value.trim();
-  const password = document.getElementById("password").value;
+if (el) {
+el.innerText = msg;
+el.style.color = color;
+}
+}
 
-  if (!phone || !password) {
-    alert("Enter phone and password");
-    return;
-  }
+document
+.getElementById("loginBtn")
+.addEventListener("click", async () => {
 
-  try {
+const email =
+document.getElementById("email").value.trim();
 
-    const ref = doc(db, "users", phone);
-    const snap = await getDoc(ref);
+const password =
+document.getElementById("password").value;
 
-    if (!snap.exists()) {
-      alert("User not found");
-      return;
-    }
+if (!email || !password) {
 
-    const data = snap.data();
+```
+status(
+  "Enter email and password",
+  "red"
+);
 
-    if (data.password === password) {
+return;
+```
 
-      alert("Login successful 🎉");
+}
 
-      localStorage.setItem("userLoggedIn", "true");
+try {
 
-      window.location.href = "home.html";
+```
+status(
+  "Logging in...",
+  "#00b7ff"
+);
 
-    } else {
-      alert("Wrong password ❌");
-    }
+const userCredential =
+  await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
 
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
+console.log(
+  userCredential.user
+);
+
+localStorage.setItem(
+  "userLoggedIn",
+  "true"
+);
+
+status(
+  "Login Successful 🎉",
+  "#00ff99"
+);
+
+setTimeout(() => {
+
+  window.location.href =
+    "home.html";
+
+}, 1000);
+```
+
+} catch (error) {
+
+```
+console.error(error);
+
+status(
+  error.message,
+  "red"
+);
+```
+
+}
 
 });
+
