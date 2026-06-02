@@ -4,6 +4,7 @@
 <title>Withdraw</title>
 <style>
 body {
+    margin: 0;
     font-family: Arial;
     background: #0f172a;
     color: white;
@@ -11,8 +12,8 @@ body {
 }
 
 .box {
-    width: 320px;
-    margin: 50px auto;
+    width: 340px;
+    margin: 60px auto;
     padding: 20px;
     background: #1e293b;
     border-radius: 12px;
@@ -27,13 +28,13 @@ input, select {
 }
 
 button {
-    padding: 10px;
+    padding: 12px;
     width: 95%;
     background: #22c55e;
     border: none;
     border-radius: 8px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -43,18 +44,18 @@ button {
 <div class="box">
     <h2>Withdraw Coins</h2>
 
-    <p>Balance: <span id="coins">1200</span> coins</p>
+    <p>Balance: <span id="coins"></span> coins</p>
     <p>1000 coins = ₹10</p>
 
-    <input id="amount" placeholder="Enter coins to withdraw">
+    <input id="amount" placeholder="Enter coins">
 
     <select id="method">
-        <option value="upi">UPI ID</option>
-        <option value="bank">Bank Account</option>
-        <option value="card">Card Number</option>
+        <option>UPI</option>
+        <option>Bank</option>
+        <option>Card</option>
     </select>
 
-    <input id="details" placeholder="Enter UPI / Bank / Card details">
+    <input id="details" placeholder="Enter payment details">
 
     <button onclick="withdraw()">Withdraw</button>
 
@@ -62,7 +63,8 @@ button {
 </div>
 
 <script>
-let coins = 1200;
+let coins = parseInt(localStorage.getItem("coins") || "0");
+document.getElementById("coins").innerText = coins;
 
 function withdraw() {
     let amt = parseInt(document.getElementById("amount").value);
@@ -71,26 +73,28 @@ function withdraw() {
     let msg = document.getElementById("msg");
 
     if (!amt || amt < 1000) {
-        msg.innerText = "Minimum 1000 coins required!";
+        msg.innerText = "Minimum 1000 coins required";
         return;
     }
 
     if (amt > coins) {
-        msg.innerText = "Not enough coins!";
+        msg.innerText = "Not enough coins";
         return;
     }
 
     if (!details) {
-        msg.innerText = "Enter payment details!";
+        msg.innerText = "Enter payment details";
         return;
     }
 
-    let money = (amt / 1000) * 10; // conversion rate
+    let money = (amt / 1000) * 10;
 
     coins -= amt;
+    localStorage.setItem("coins", coins);
+
     document.getElementById("coins").innerText = coins;
 
-    msg.innerText = "Withdrawal request sent: ₹" + money + " via " + method;
+    msg.innerText = "Withdraw request sent: ₹" + money;
 }
 </script>
 
