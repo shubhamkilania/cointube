@@ -1,101 +1,390 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Withdraw</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Withdraw - CoinTube</title>
+
 <style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: #0f172a;
-    color: white;
-    text-align: center;
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-.box {
-    width: 340px;
-    margin: 60px auto;
-    padding: 20px;
-    background: #1e293b;
-    border-radius: 12px;
+body{
+background:#080811;
+color:white;
+padding:25px;
 }
 
-input, select {
-    width: 90%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: none;
+.container{
+max-width:900px;
+margin:auto;
 }
 
-button {
-    padding: 12px;
-    width: 95%;
-    background: #22c55e;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
+.logo{
+text-align:center;
+font-size:45px;
+font-weight:900;
+margin-bottom:25px;
+
+background:linear-gradient(
+90deg,
+#ffd700,
+#7b2cff
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
+
+.balance-box{
+background:linear-gradient(
+135deg,
+#160026,
+#2f0057
+);
+
+padding:25px;
+border-radius:20px;
+text-align:center;
+margin-bottom:25px;
+}
+
+.balance-box h2{
+margin-bottom:10px;
+}
+
+.balance-box h1{
+font-size:50px;
+color:#ffd700;
+}
+
+.card{
+background:#13131d;
+padding:25px;
+border-radius:20px;
+border:1px solid #222;
+margin-bottom:25px;
+}
+
+.card h2{
+margin-bottom:15px;
+color:#00b7ff;
+}
+
+.notice{
+color:#aaa;
+line-height:1.7;
+}
+
+input{
+width:100%;
+padding:15px;
+margin-bottom:15px;
+border:none;
+border-radius:12px;
+background:#1c1c28;
+color:white;
+font-size:15px;
+}
+
+input:focus{
+outline:1px solid #7b2cff;
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-size:16px;
+
+background:linear-gradient(
+90deg,
+#7b2cff,
+#a855f7
+);
+
+color:white;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.history-item{
+background:#1c1c28;
+padding:18px;
+border-radius:12px;
+margin-top:12px;
+border-left:4px solid #ffd700;
+}
+
+.status{
+color:#ffd700;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.back-btn{
+margin-top:15px;
+background:#222;
+}
+
+.empty{
+color:#888;
+text-align:center;
+padding:10px;
+}
+
 </style>
 </head>
-
 <body>
 
-<div class="box">
-    <h2>Withdraw Coins</h2>
+<div class="container">
 
-    <p>Balance: <span id="coins"></span> coins</p>
-    <p>1000 coins = ₹10</p>
+<div class="logo">
+CoinTube
+</div>
 
-    <input id="amount" placeholder="Enter coins">
+<div class="balance-box">
 
-    <select id="method">
-        <option>UPI</option>
-        <option>Bank</option>
-        <option>Card</option>
-    </select>
+<h2>💰 Available Coins</h2>
 
-    <input id="details" placeholder="Enter payment details">
+<h1 id="coinBalance">
+0
+</h1>
 
-    <button onclick="withdraw()">Withdraw</button>
+</div>
 
-    <p id="msg"></p>
+<div class="card">
+
+<h2>Withdraw Coins</h2>
+
+<p class="notice">
+Minimum withdrawal amount is <b>500 Coins</b>.
+</p>
+
+<br>
+
+<input
+id="upi"
+type="text"
+placeholder="Enter UPI ID (example@upi)"
+>
+
+<input
+id="amount"
+type="number"
+placeholder="Enter Coins Amount"
+>
+
+<button onclick="withdrawCoins()">
+Request Withdraw
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>📜 Withdrawal History</h2>
+
+<div id="history">
+
+<div class="empty">
+No withdrawal requests yet.
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>⚠ Important Notice</h2>
+
+<p class="notice">
+
+Withdrawals are currently in development.
+
+For now, requests are stored locally on your device.
+
+Future updates will support:
+
+<br><br>
+
+✅ Real UPI Payments<br>
+✅ Bank Transfers<br>
+✅ Automatic Withdrawals<br>
+✅ Payment Status Tracking
+
+</p>
+
+</div>
+
+<button
+class="back-btn"
+onclick="location.href='home.html'">
+🏠 Back Home
+</button>
+
 </div>
 
 <script>
-let coins = parseInt(localStorage.getItem("coins") || "0");
-document.getElementById("coins").innerText = coins;
 
-function withdraw() {
-    let amt = parseInt(document.getElementById("amount").value);
-    let method = document.getElementById("method").value;
-    let details = document.getElementById("details").value;
-    let msg = document.getElementById("msg");
+let coins =
+parseInt(
+localStorage.getItem("coins")
+) || 0;
 
-    if (!amt || amt < 1000) {
-        msg.innerText = "Minimum 1000 coins required";
-        return;
-    }
+document.getElementById(
+"coinBalance"
+).innerText = coins;
 
-    if (amt > coins) {
-        msg.innerText = "Not enough coins";
-        return;
-    }
+loadHistory();
 
-    if (!details) {
-        msg.innerText = "Enter payment details";
-        return;
-    }
+function withdrawCoins(){
 
-    let money = (amt / 1000) * 10;
+const upi =
+document.getElementById("upi")
+.value.trim();
 
-    coins -= amt;
-    localStorage.setItem("coins", coins);
+const amount =
+parseInt(
+document.getElementById("amount")
+.value
+);
 
-    document.getElementById("coins").innerText = coins;
+if(!upi){
 
-    msg.innerText = "Withdraw request sent: ₹" + money;
+alert("Enter UPI ID");
+return;
+
 }
+
+if(!amount || amount <= 0){
+
+alert("Enter valid amount");
+return;
+
+}
+
+if(amount < 500){
+
+alert("Minimum withdrawal is 500 Coins");
+return;
+
+}
+
+if(amount > coins){
+
+alert("Not enough coins");
+return;
+
+}
+
+coins -= amount;
+
+localStorage.setItem(
+"coins",
+coins
+);
+
+document.getElementById(
+"coinBalance"
+).innerText = coins;
+
+let history =
+JSON.parse(
+localStorage.getItem(
+"withdrawHistory"
+)
+) || [];
+
+history.push({
+
+upi: upi,
+amount: amount,
+status: "Pending",
+date: new Date().toLocaleString()
+
+});
+
+localStorage.setItem(
+"withdrawHistory",
+JSON.stringify(history)
+);
+
+document.getElementById("upi").value = "";
+document.getElementById("amount").value = "";
+
+alert("Withdrawal Request Submitted");
+
+loadHistory();
+
+}
+
+function loadHistory(){
+
+const historyDiv =
+document.getElementById(
+"history"
+);
+
+let history =
+JSON.parse(
+localStorage.getItem(
+"withdrawHistory"
+)
+) || [];
+
+if(history.length === 0){
+
+historyDiv.innerHTML = `
+<div class="empty">
+No withdrawal requests yet.
+</div>
+`;
+
+return;
+
+}
+
+historyDiv.innerHTML = "";
+
+history.slice().reverse().forEach(item=>{
+
+historyDiv.innerHTML += `
+
+<div class="history-item">
+
+<div class="status">
+🟡 ${item.status}
+</div>
+
+💰 ${item.amount} Coins
+
+<br><br>
+
+📱 ${item.upi}
+
+<br><br>
+
+📅 ${item.date}
+
+</div>
+
+`;
+
+});
+
+}
+
 </script>
 
 </body>
