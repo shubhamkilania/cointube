@@ -3,209 +3,415 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CoinTube Dashboard</title>
+<title>CoinTube Home</title>
 
 <style>
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-    background:#0b0b0f;
-    color:white;
-    display:flex;
+background:#080811;
+color:white;
+display:flex;
+min-height:100vh;
 }
 
 /* SIDEBAR */
+
 .sidebar{
-    width:240px;
-    height:100vh;
-    background:#111;
-    padding:20px;
-    position:fixed;
-    left:0;
-    top:0;
-    border-right:1px solid #2a2a2a;
+width:240px;
+background:#111;
+padding:20px;
+position:fixed;
+height:100%;
+border-right:1px solid #222;
 }
 
 .logo{
-    font-size:22px;
-    font-weight:900;
-    margin-bottom:30px;
-    background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+font-size:35px;
+font-weight:900;
+margin-bottom:30px;
+
+background:linear-gradient(
+90deg,
+#ffd700,
+#7b2cff
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .sidebar a{
-    display:block;
-    color:#ccc;
-    text-decoration:none;
-    padding:12px;
-    margin:8px 0;
-    border-radius:10px;
-    transition:0.2s;
+display:block;
+padding:14px;
+margin:10px 0;
+border-radius:12px;
+text-decoration:none;
+color:#ccc;
+transition:.3s;
 }
 
 .sidebar a:hover{
-    background:#1f1f2a;
-    color:white;
+background:#7b2cff;
+color:white;
 }
 
-/* MAIN AREA */
+/* MAIN */
+
 .main{
-    margin-left:260px;
-    padding:20px;
-    width:100%;
+margin-left:240px;
+width:100%;
+padding:25px;
 }
 
-/* TOP BAR */
+/* TOP */
+
 .topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
 }
 
-.topbar h2{
-    font-size:22px;
+.user{
+background:#1b1b25;
+padding:10px 15px;
+border-radius:12px;
 }
 
-.profile{
-    background:#1f1f2a;
-    padding:10px 15px;
-    border-radius:12px;
+/* BALANCE */
+
+.balance{
+background:linear-gradient(
+135deg,
+#160026,
+#2f0057
+);
+
+padding:25px;
+border-radius:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
 }
 
-/* COIN CARD */
-.coin-card{
-    background:linear-gradient(135deg,#1a1a2e,#2b1055);
-    padding:20px;
-    border-radius:15px;
-    margin-bottom:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.balance h2{
+font-size:20px;
 }
 
-.coin-card h1{
-    font-size:28px;
+.coin-value{
+font-size:45px;
+font-weight:bold;
+color:#ffd700;
 }
 
-.coin{
-    font-size:26px;
-    color:#00ff99;
-    font-weight:bold;
+/* SECTION TITLE */
+
+.section-title{
+font-size:28px;
+margin-bottom:20px;
 }
 
-/* TASK GRID */
+/* GRID */
+
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:15px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
 }
 
 .card{
-    background:#141420;
-    padding:20px;
-    border-radius:15px;
-    border:1px solid #2a2a2a;
+background:#13131d;
+padding:20px;
+border-radius:18px;
+border:1px solid #222;
 }
 
 .card h3{
-    margin-bottom:10px;
+margin-bottom:10px;
 }
 
 .card p{
-    color:#aaa;
-    font-size:14px;
-    margin-bottom:15px;
+color:#aaa;
+margin-bottom:15px;
+line-height:1.5;
+}
+
+.reward{
+display:inline-block;
+background:#1f1f30;
+padding:8px 12px;
+border-radius:10px;
+margin-bottom:15px;
+color:#00ff99;
+font-weight:bold;
 }
 
 button{
-    padding:10px 15px;
-    border:none;
-    border-radius:10px;
-    background:linear-gradient(90deg,#7b2cff,#a855f7);
-    color:white;
-    cursor:pointer;
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+
+background:linear-gradient(
+90deg,
+#7b2cff,
+#a855f7
+);
+
+color:white;
 }
+
+button:hover{
+opacity:.9;
+}
+
+/* FOOTER */
+
+.footer{
+margin-top:40px;
+text-align:center;
+color:#666;
+}
+
 </style>
 </head>
-
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="logo">CoinTube</div>
 
-    <a href="#">🏠 Home</a>
-    <a href="#">📊 Dashboard</a>
-    <a href="#">👥 Referral</a>
-    <a href="#">🏆 Leaderboard</a>
-    <a href="login.html">🚪 Logout</a>
+<div class="logo">
+CoinTube
 </div>
 
-<!-- MAIN -->
+<a href="home.html">🏠 Home</a>
+
+<a href="video-task.html">
+🎥 Video Tasks
+</a>
+
+<a href="referral.html">
+👥 Referral
+</a>
+
+<a href="leaderboard.html">
+🏆 Leaderboard
+</a>
+
+<a href="withdraw.html">
+💰 Withdraw
+</a>
+
+<a href="login.html">
+🚪 Logout
+</a>
+
+</div>
+
 <div class="main">
 
-    <div class="topbar">
-        <h2>Welcome Back 👋</h2>
-        <div class="profile">User</div>
-    </div>
+<div class="topbar">
 
-    <!-- COIN BOX -->
-    <div class="coin-card">
-        <div>
-            <h1>Your Balance</h1>
-            <p>Keep earning coins daily</p>
-        </div>
-        <div class="coin" id="coins">0</div>
-    </div>
+<div>
+<h1>Welcome Back 👋</h1>
+<p style="color:#aaa">
+Complete tasks and earn more coins
+</p>
+</div>
 
-    <!-- TASKS -->
-    <div class="grid">
+<div class="user">
+User
+</div>
 
-        <div class="card">
-            <h3>🎥 Watch Video</h3>
-            <p>Earn 10 coins per video</p>
-            <button onclick="earn(10)">Watch</button>
-        </div>
+</div>
 
-        <div class="card">
-            <h3>📅 Daily Check-in</h3>
-            <p>Earn daily bonus</p>
-            <button onclick="earn(20)">Claim</button>
-        </div>
+<div class="balance">
 
-        <div class="card">
-            <h3>👥 Refer Friends</h3>
-            <p>Earn 100 coins per referral</p>
-            <button>Invite</button>
-        </div>
+<div>
 
-        <div class="card">
-            <h3>🏆 Leaderboard</h3>
-            <p>Top users get rewards</p>
-            <button>View</button>
-        </div>
+<h2>Your Coins</h2>
 
-    </div>
+<p style="color:#aaa">
+Keep earning daily
+</p>
+
+</div>
+
+<div
+class="coin-value"
+id="coins"
+>
+0
+</div>
+
+</div>
+
+<h2 class="section-title">
+Main Tasks
+</h2>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>🎥 Watch Video</h3>
+
+<p>
+Watch videos and earn coins.
+</p>
+
+<div class="reward">
++10 Coins
+</div>
+
+<button
+onclick="location.href='video-task.html'"
+>
+Watch Now
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>📅 Daily Check-In</h3>
+
+<p>
+Claim your daily reward.
+</p>
+
+<div class="reward">
++20 Coins
+</div>
+
+<button onclick="earn(20)">
+Claim Reward
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>👥 Refer Friends</h3>
+
+<p>
+Invite friends and earn coins.
+</p>
+
+<div class="reward">
++100 Coins
+</div>
+
+<button
+onclick="location.href='referral.html'"
+>
+Invite Friends
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>🏆 Leaderboard</h3>
+
+<p>
+Top users get extra rewards.
+</p>
+
+<div class="reward">
+Top Rewards
+</div>
+
+<button
+onclick="location.href='leaderboard.html'"
+>
+View Ranking
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>💰 Withdraw</h3>
+
+<p>
+Withdraw your earned coins.
+</p>
+
+<div class="reward">
+Min 500 Coins
+</div>
+
+<button
+onclick="location.href='withdraw.html'"
+>
+Withdraw
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>📝 Complete Tasks</h3>
+
+<p>
+Complete more tasks to earn.
+</p>
+
+<div class="reward">
++50 Coins
+</div>
+
+<button>
+Open Tasks
+</button>
+
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 CoinTube. All rights reserved.
+</div>
 
 </div>
 
 <script>
-let coins = localStorage.getItem("coins") || 0;
-document.getElementById("coins").innerText = coins;
 
-function earn(val){
-    coins = parseInt(coins) + val;
-    localStorage.setItem("coins", coins);
-    document.getElementById("coins").innerText = coins;
+let coins =
+localStorage.getItem("coins") || 0;
+
+document.getElementById("coins").innerText =
+coins;
+
+function earn(value){
+
+coins =
+parseInt(coins) + value;
+
+localStorage.setItem(
+"coins",
+coins
+);
+
+document.getElementById("coins").innerText =
+coins;
+
+alert(
+"+" + value + " Coins Added"
+);
+
 }
+
 </script>
 
 </body>
