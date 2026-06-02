@@ -1,3 +1,98 @@
-<button onclick="location.href='withdraw.html'">
-Withdraw
-</button>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Withdraw</title>
+<style>
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+}
+
+.box {
+    width: 320px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #1e293b;
+    border-radius: 12px;
+}
+
+input, select {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    padding: 10px;
+    width: 95%;
+    background: #22c55e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Withdraw Coins</h2>
+
+    <p>Balance: <span id="coins">1200</span> coins</p>
+    <p>1000 coins = ₹10</p>
+
+    <input id="amount" placeholder="Enter coins to withdraw">
+
+    <select id="method">
+        <option value="upi">UPI ID</option>
+        <option value="bank">Bank Account</option>
+        <option value="card">Card Number</option>
+    </select>
+
+    <input id="details" placeholder="Enter UPI / Bank / Card details">
+
+    <button onclick="withdraw()">Withdraw</button>
+
+    <p id="msg"></p>
+</div>
+
+<script>
+let coins = 1200;
+
+function withdraw() {
+    let amt = parseInt(document.getElementById("amount").value);
+    let method = document.getElementById("method").value;
+    let details = document.getElementById("details").value;
+    let msg = document.getElementById("msg");
+
+    if (!amt || amt < 1000) {
+        msg.innerText = "Minimum 1000 coins required!";
+        return;
+    }
+
+    if (amt > coins) {
+        msg.innerText = "Not enough coins!";
+        return;
+    }
+
+    if (!details) {
+        msg.innerText = "Enter payment details!";
+        return;
+    }
+
+    let money = (amt / 1000) * 10; // conversion rate
+
+    coins -= amt;
+    document.getElementById("coins").innerText = coins;
+
+    msg.innerText = "Withdrawal request sent: ₹" + money + " via " + method;
+}
+</script>
+
+</body>
+</html>
