@@ -1,3 +1,259 @@
-<button onclick="location.href='referral.html'">
-Invite Friends
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referral - CoinTube</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#080811;
+color:white;
+padding:25px;
+}
+
+.logo{
+font-size:42px;
+font-weight:900;
+text-align:center;
+margin-bottom:30px;
+
+background:linear-gradient(
+90deg,
+#ffd700,
+#7b2cff
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+}
+
+.card{
+background:#111;
+border:1px solid #222;
+border-radius:20px;
+padding:25px;
+margin-bottom:20px;
+}
+
+.title{
+font-size:24px;
+margin-bottom:15px;
+color:#00b7ff;
+}
+
+.referral-box{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.referral-box input{
+flex:1;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#1a1a1a;
+color:white;
+font-size:16px;
+}
+
+button{
+padding:14px 20px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+background:linear-gradient(
+90deg,
+#7b2cff,
+#a855f7
+);
+color:white;
+font-size:16px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+}
+
+.stat-card{
+background:#151520;
+padding:20px;
+border-radius:15px;
+text-align:center;
+}
+
+.stat-card h2{
+color:#ffd700;
+margin-top:10px;
+}
+
+.reward{
+color:#00ff99;
+font-weight:bold;
+margin-top:10px;
+}
+
+.coming-soon{
+text-align:center;
+padding:25px;
+font-size:18px;
+border:1px dashed #7b2cff;
+border-radius:15px;
+color:#bbb;
+}
+
+.home-btn{
+width:100%;
+margin-top:10px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="logo">
+CoinTube
+</div>
+
+<div class="card">
+
+<div class="title">
+👥 Your Referral Code
+</div>
+
+<p style="color:#aaa;">
+Invite friends and earn rewards together.
+</p>
+
+<div class="referral-box">
+
+<input
+id="refCode"
+value="COIN1234"
+readonly
+>
+
+<button onclick="copyCode()">
+Copy
 </button>
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-card">
+<h3>Total Referrals</h3>
+<h2>0</h2>
+</div>
+
+<div class="stat-card">
+<h3>Coins Earned</h3>
+<h2>0</h2>
+</div>
+
+<div class="stat-card">
+<h3>Team Members</h3>
+<h2>0</h2>
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<div class="title">
+🎁 Referral Rewards
+</div>
+
+<p class="reward">
+Invite a friend → +100 Coins
+</p>
+
+<p class="reward">
+Friend joins → +50 Coins Bonus
+</p>
+
+</div>
+
+<div class="card">
+
+<div class="title">
+🚀 Referral System
+</div>
+
+<div class="coming-soon">
+Referral System Coming Soon
+<br><br>
+Users will soon be able to invite friends,
+track referrals and earn bonus rewards.
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="title">
+👑 Team System
+</div>
+
+<div class="coming-soon">
+Team System Coming Soon
+<br><br>
+Build your team, increase earnings,
+unlock ranks and earn leadership rewards.
+</div>
+
+</div>
+
+<button
+class="home-btn"
+onclick="location.href='home.html'">
+🏠 Back To Home
+</button>
+
+</div>
+
+<script>
+
+function copyCode(){
+
+const code =
+document.getElementById("refCode");
+
+code.select();
+
+navigator.clipboard.writeText(
+code.value
+);
+
+alert(
+"Referral Code Copied!"
+);
+
+}
+
+</script>
+
+</body>
+</html>
