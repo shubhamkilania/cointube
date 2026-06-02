@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Watch Video</title>
+
+<style>
+
+body{
+background:#080811;
+color:white;
+font-family:Arial;
+padding:30px;
+text-align:center;
+}
+
+.logo{
+font-size:40px;
+font-weight:bold;
+margin-bottom:20px;
+background:linear-gradient(90deg,#ffd700,#7b2cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.box{
+background:#111;
+padding:25px;
+border-radius:20px;
+max-width:900px;
+margin:auto;
+}
+
+.timer{
+font-size:30px;
+color:#ffd700;
+margin:20px 0;
+}
+
+.reward{
+font-size:22px;
+color:#00ff99;
+margin-bottom:20px;
+}
+
+button{
+padding:15px 30px;
+border:none;
+border-radius:12px;
+font-size:18px;
+cursor:pointer;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
+color:white;
+}
+
+button:disabled{
+background:#444;
+}
+
+iframe{
+width:100%;
+height:500px;
+border:none;
+border-radius:15px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="logo">
+CoinTube
+</div>
+
+<div class="box">
+
+<h2>
+🎥 Watch Full Video
+</h2>
+
+<p style="color:#00b7ff;">
+Stay on this page until timer finishes
+</p>
+
+<br>
+
+<iframe
+src="https://www.youtube.com/embed/jNQXAC9IVRw?autoplay=1&mute=1"
+allow="autoplay"
+allowfullscreen>
+</iframe>
+
+<div
+class="timer"
+id="timer">
+30
+</div>
+
+<div class="reward">
+Reward: +10 Coins
+</div>
+
+<button
+id="claimBtn"
+disabled>
+Watch First
+</button>
+
+</div>
+
+<script>
+
+let time = 30;
+
+const timer =
+document.getElementById("timer");
+
+const claimBtn =
+document.getElementById("claimBtn");
+
+const interval =
+setInterval(()=>{
+
+time--;
+
+timer.innerHTML =
+time + " sec";
+
+if(time <= 0){
+
+clearInterval(interval);
+
+timer.innerHTML =
+"✅ Completed";
+
+claimBtn.disabled =
+false;
+
+claimBtn.innerHTML =
+"Claim Reward";
+
+}
+
+},1000);
+
+claimBtn.onclick = ()=>{
+
+let coins =
+parseInt(
+localStorage.getItem("coins")
+) || 0;
+
+coins += 10;
+
+localStorage.setItem(
+"coins",
+coins
+);
+
+let currentTask =
+parseInt(
+localStorage.getItem(
+"currentTask"
+)
+);
+
+let completed =
+JSON.parse(
+localStorage.getItem(
+"videoTasks"
+)
+) || [];
+
+if(
+!completed.includes(
+currentTask
+)
+){
+
+completed.push(
+currentTask
+);
+
+localStorage.setItem(
+"videoTasks",
+JSON.stringify(
+completed
+)
+);
+
+}
+
+alert(
+"+10 Coins Added!"
+);
+
+location.href =
+"video-task.html";
+
+};
+
+</script>
+
+</body>
+</html>
