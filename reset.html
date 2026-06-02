@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,193 +8,201 @@
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-    background:#050505;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    color:white;
+background:#050505;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+padding:20px;
 }
 
 .box{
-    width:400px;
-    background:#111;
-    padding:40px;
-    border-radius:20px;
-    border:1px solid #7b2cff;
-    text-align:center;
-    box-shadow:0 0 25px rgba(123,44,255,.3);
+width:400px;
+background:#111;
+padding:40px;
+border-radius:20px;
+border:1px solid #7b2cff;
+text-align:center;
+box-shadow:0 0 25px rgba(123,44,255,.3);
 }
 
 .logo{
-    font-size:38px;
-    font-weight:900;
-    margin-bottom:15px;
-    background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+font-size:38px;
+font-weight:900;
+margin-bottom:15px;
+
+background:linear-gradient(
+90deg,
+#7b2cff,
+#00b7ff,
+#ffd700
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+color:#bbb;
+margin-bottom:25px;
 }
 
 input{
-    width:100%;
-    padding:14px;
-    margin-bottom:12px;
-    border:none;
-    border-radius:10px;
-    background:#1a1a1a;
-    color:white;
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
 }
 
 input:focus{
-    outline:1px solid #7b2cff;
+outline:1px solid #7b2cff;
 }
 
 button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    background:linear-gradient(90deg,#7b2cff,#a855f7);
-    color:white;
-    cursor:pointer;
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+
+background:linear-gradient(
+90deg,
+#7b2cff,
+#a855f7
+);
+
+color:white;
+cursor:pointer;
 }
 
 button:hover{
-    opacity:0.9;
+opacity:.9;
 }
 
 #status{
-    margin-top:10px;
-    font-size:13px;
-    color:#bbb;
+margin-top:15px;
+font-size:14px;
+color:#bbb;
+}
+
+.back{
+margin-top:20px;
+}
+
+.back a{
+color:#00b7ff;
+text-decoration:none;
 }
 </style>
+
 </head>
 
 <body>
 
 <div class="box">
 
-    <div class="logo">CoinTube</div>
+<div class="logo">
+CoinTube
+</div>
 
-    <input id="phone" placeholder="+91XXXXXXXXXX">
+<p class="subtitle">
+Enter your registered email address
+</p>
 
-    <button id="sendOtpBtn">Send OTP</button>
+<input
+id="email"
+type="email"
+placeholder="Email Address"
 
-    <input id="otp" placeholder="Enter OTP">
+>
 
-    <input id="newPassword" type="password" placeholder="New Password">
+<button id="resetBtn">
+Send Reset Link
+</button>
 
-    <button id="resetBtn">Reset Password</button>
+<div id="status"></div>
 
-    <div id="status"></div>
+<div class="back">
+<a href="login.html">
+Back to Login
+</a>
+</div>
 
 </div>
 
-<div id="recaptcha-container"></div>
-
 <script type="module">
+
 import {
-  auth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  db,
-  doc,
-  updateDoc
-} from "./firebase-config.js";
+auth,
+sendPasswordResetEmail
+}
+from "./firebase-config.js";
 
-let confirmationResult;
-
-/* ---------------- STATUS ---------------- */
-function status(msg, color="#bbb"){
-  const el = document.getElementById("status");
-  el.innerText = msg;
-  el.style.color = color;
+function status(msg,color="#bbb"){
+const el=document.getElementById("status");
+el.innerText=msg;
+el.style.color=color;
 }
 
-/* ---------------- RECAPTCHA ---------------- */
-window.recaptchaVerifier = new RecaptchaVerifier(
-  auth,
-  "recaptcha-container",
-  {
-    size: "invisible"
-  }
+document
+.getElementById("resetBtn")
+.addEventListener("click",async()=>{
+
+const email=
+document.getElementById("email").value.trim();
+
+if(!email){
+
+status(
+"Enter your email address",
+"red"
 );
 
-recaptchaVerifier.render();
+return;
+}
 
-/* ---------------- SEND OTP ---------------- */
-document.getElementById("sendOtpBtn").addEventListener("click", async () => {
+try{
 
-  const phone = document.getElementById("phone").value;
+status(
+"Sending reset link...",
+"#00b7ff"
+);
 
-  if (!phone) {
-    status("Enter phone number", "red");
-    return;
-  }
+await sendPasswordResetEmail(
+auth,
+email
+);
 
-  try {
-    status("Sending OTP...", "#00b7ff");
+status(
+"Password reset email sent ✔",
+"#00ff99"
+);
 
-    confirmationResult = await signInWithPhoneNumber(
-      auth,
-      phone,
-      window.recaptchaVerifier
-    );
+}catch(error){
 
-    status("OTP sent ✔", "#00ff99");
+console.error(error);
 
-  } catch (err) {
-    console.error(err);
-    status(err.message, "red");
-  }
+status(
+error.message,
+"red"
+);
 
-});
-
-/* ---------------- RESET PASSWORD ---------------- */
-document.getElementById("resetBtn").addEventListener("click", async () => {
-
-  const otp = document.getElementById("otp").value;
-  const newPassword = document.getElementById("newPassword").value;
-  const phone = document.getElementById("phone").value;
-
-  if (!otp || !newPassword) {
-    status("Fill all fields", "red");
-    return;
-  }
-
-  try {
-
-    status("Verifying OTP...", "#00b7ff");
-
-    await confirmationResult.confirm(otp);
-
-    status("Updating password...", "#00b7ff");
-
-    await updateDoc(doc(db, "users", phone), {
-      password: newPassword
-    });
-
-    status("Password updated 🎉", "#00ff99");
-
-    setTimeout(() => {
-      window.location.href = "login.html";
-    }, 1200);
-
-  } catch (err) {
-    console.error(err);
-    status(err.message, "red");
-  }
+}
 
 });
+
 </script>
 
 </body>
 </html>
+
