@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,37 +18,28 @@ font-family:Arial,sans-serif;
 body{
 background:#080811;
 color:white;
-padding:25px;
+padding:20px;
 }
 
 .container{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
 }
 
 .logo{
 text-align:center;
-font-size:45px;
+font-size:40px;
 font-weight:900;
 margin-bottom:25px;
-
-background:linear-gradient(
-90deg,
-#ffd700,
-#7b2cff
-);
-
+background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-.profile-card{
-background:linear-gradient(
-135deg,
-#160026,
-#2f0057
-);
+/* PROFILE CARD */
 
+.profile-card{
+background:linear-gradient(135deg,#160026,#2f0057);
 padding:30px;
 border-radius:25px;
 text-align:center;
@@ -58,7 +50,7 @@ margin-bottom:25px;
 width:120px;
 height:120px;
 border-radius:50%;
-background:#222;
+background:#1b1b25;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -74,11 +66,18 @@ font-weight:bold;
 margin-bottom:10px;
 }
 
-.email{
+.ref{
+color:#ffd700;
+margin-bottom:10px;
+}
+
+.member{
 color:#bbb;
 }
 
-.grid{
+/* STATS */
+
+.stats{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:20px;
@@ -87,15 +86,15 @@ margin-bottom:25px;
 
 .card{
 background:#13131d;
-padding:25px;
-border-radius:20px;
+padding:20px;
+border-radius:18px;
 border:1px solid #222;
 text-align:center;
 }
 
 .card h3{
 margin-bottom:10px;
-color:#00b7ff;
+color:#aaa;
 }
 
 .value{
@@ -104,44 +103,72 @@ font-weight:bold;
 color:#ffd700;
 }
 
-.info-card{
+/* INFO */
+
+.info{
 background:#13131d;
 padding:25px;
-border-radius:20px;
+border-radius:18px;
 border:1px solid #222;
-margin-bottom:20px;
+margin-bottom:25px;
 }
 
-.info-card h2{
-color:#00b7ff;
+.info h2{
 margin-bottom:15px;
+color:#00b7ff;
 }
 
-.info-card p{
-color:#aaa;
+.info p{
 line-height:1.8;
+color:#bbb;
 }
 
-button{
+/* BUTTONS */
+
+.btn{
 width:100%;
-padding:15px;
+padding:14px;
 border:none;
 border-radius:12px;
-cursor:pointer;
 font-size:16px;
-
-background:linear-gradient(
-90deg,
-#7b2cff,
-#a855f7
-);
-
+cursor:pointer;
+margin-top:12px;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
 color:white;
-margin-top:10px;
 }
 
-button:hover{
+.btn:hover{
 opacity:.9;
+}
+
+.footer{
+text-align:center;
+margin-top:30px;
+color:#666;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.profile-card{
+padding:20px;
+}
+
+.avatar{
+width:90px;
+height:90px;
+font-size:40px;
+}
+
+.name{
+font-size:22px;
+}
+
+.value{
+font-size:28px;
+}
+
 }
 
 </style>
@@ -164,79 +191,118 @@ CoinTube
 Guest User
 </div>
 
-<div class="email" id="userEmail">
-cointube.user@gmail.com
+<div class="ref" id="refCode">
+REF: GUES1234
+</div>
+
+<div class="member">
+Member Since Today
 </div>
 
 </div>
 
-<div class="grid">
+<div class="stats">
 
 <div class="card">
 <h3>💰 Coins</h3>
-<div class="value" id="coins">
-0
-</div>
+<div class="value" id="coins">0</div>
 </div>
 
 <div class="card">
-<h3>₹ Money</h3>
-<div class="value" id="money">
-0
-</div>
+<h3>💵 Money</h3>
+<div class="value" id="money">₹0</div>
 </div>
 
 <div class="card">
-<h3>🎥 Videos Watched</h3>
-<div class="value" id="videos">
-0
-</div>
+<h3>🎥 Videos</h3>
+<div class="value" id="videos">0</div>
 </div>
 
 <div class="card">
 <h3>👥 Referrals</h3>
-<div class="value" id="referrals">
-0
-</div>
+<div class="value" id="refs">0</div>
 </div>
 
 </div>
 
-<div class="info-card">
+<div class="info">
 
-<h2>📊 Account Information</h2>
+<h2>📋 Account Information</h2>
 
 <p>
-Joined CoinTube: Today
-<br>
-Account Status: Active ✅
-<br>
+Username: <span id="displayName">Guest User</span><br>
+Referral Code: <span id="displayRef">GUES1234</span><br>
+Status: Active ✅<br>
 Membership: Free User
 </p>
 
 </div>
 
-<div class="info-card">
+<div class="info">
 
-<h2>⚙ Features Coming Soon</h2>
+<h2>🏆 Achievements</h2>
 
 <p>
-✅ Profile Editing<br>
-✅ Team System<br>
-✅ Referral Rewards<br>
-✅ Achievement Badges<br>
-✅ VIP Membership
+🥉 First Login<br>
+🥈 First 100 Coins (Locked)<br>
+🥇 First Withdrawal (Locked)<br>
+👑 VIP Member (Coming Soon)
 </p>
 
 </div>
 
-<button onclick="location.href='home.html'">
+<button class="btn" onclick="location.href='home.html'">
 🏠 Back Home
 </button>
+
+<button class="btn" onclick="changeName()">
+✏️ Change Username
+</button>
+
+<div class="footer">
+© 2026 CoinTube
+</div>
 
 </div>
 
 <script>
+
+let userName =
+localStorage.getItem("userName");
+
+if(!userName){
+
+userName = "Guest User";
+
+}
+
+document.getElementById("userName").innerText =
+userName;
+
+document.getElementById("displayName").innerText =
+userName;
+
+let referral =
+localStorage.getItem("referralCode");
+
+if(!referral){
+
+referral =
+userName.substring(0,4).toUpperCase() +
+Math.floor(1000 + Math.random()*9000);
+
+localStorage.setItem(
+"referralCode",
+referral
+);
+
+}
+
+document.getElementById("refCode").innerText =
+"REF: " + referral;
+
+document.getElementById("displayRef").innerText =
+referral;
 
 document.getElementById("coins").innerText =
 localStorage.getItem("coins") || 0;
@@ -247,26 +313,27 @@ document.getElementById("money").innerText =
 document.getElementById("videos").innerText =
 localStorage.getItem("videosWatched") || 0;
 
-document.getElementById("referrals").innerText =
+document.getElementById("refs").innerText =
 localStorage.getItem("referrals") || 0;
 
-const savedName =
-localStorage.getItem("userName");
+function changeName(){
 
-if(savedName){
-document.getElementById("userName").innerText =
-savedName;
-}
+const newName =
+prompt("Enter Username");
 
-const savedEmail =
-localStorage.getItem("userEmail");
+if(!newName) return;
 
-if(savedEmail){
-document.getElementById("userEmail").innerText =
-savedEmail;
+localStorage.setItem(
+"userName",
+newName
+);
+
+location.reload();
+
 }
 
 </script>
 
 </body>
 </html>
+```
