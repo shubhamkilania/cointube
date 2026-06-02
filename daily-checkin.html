@@ -1,3 +1,221 @@
-<button onclick="location.href='daily-checkin.html'">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Check-In - CoinTube</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#080811;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+padding:20px;
+}
+
+.box{
+width:500px;
+background:#111;
+padding:35px;
+border-radius:25px;
+border:1px solid #222;
+text-align:center;
+}
+
+.logo{
+font-size:42px;
+font-weight:900;
+margin-bottom:20px;
+background:linear-gradient(90deg,#ffd700,#7b2cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+h2{
+margin-bottom:15px;
+}
+
+.reward{
+font-size:26px;
+font-weight:bold;
+color:#00ff99;
+margin-bottom:20px;
+}
+
+#status{
+color:#ffd700;
+margin-bottom:20px;
+font-size:18px;
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+font-size:17px;
+cursor:pointer;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
+color:white;
+}
+
+button:disabled{
+background:#444;
+cursor:not-allowed;
+}
+
+.back{
+margin-top:15px;
+background:#222;
+}
+
+</style>
+</head>
+<body>
+
+<div class="box">
+
+<div class="logo">
+CoinTube
+</div>
+
+<h2>📅 Daily Check-In</h2>
+
+<div class="reward">
++20 Coins
+</div>
+
+<div id="status">
+Ready To Claim
+</div>
+
+<button id="claimBtn">
 Claim Reward
 </button>
+
+<button
+class="back"
+onclick="location.href='home.html'">
+🏠 Back Home
+</button>
+
+</div>
+
+<script>
+
+const claimBtn =
+document.getElementById("claimBtn");
+
+const status =
+document.getElementById("status");
+
+const DAY =
+24 * 60 * 60 * 1000;
+
+function updateCheckin(){
+
+const lastClaim =
+localStorage.getItem(
+"dailyClaim"
+);
+
+if(!lastClaim){
+return;
+}
+
+const diff =
+Date.now() -
+Number(lastClaim);
+
+if(diff < DAY){
+
+claimBtn.disabled = true;
+
+const remaining =
+DAY - diff;
+
+const hours =
+Math.floor(
+remaining /
+(1000*60*60)
+);
+
+const minutes =
+Math.floor(
+(remaining %
+(1000*60*60))
+/
+(1000*60)
+);
+
+status.innerHTML =
+"⏳ Next claim in "
++ hours +
+"h "
++ minutes +
+"m";
+
+}
+
+}
+
+claimBtn.onclick = ()=>{
+
+const lastClaim =
+localStorage.getItem(
+"dailyClaim"
+);
+
+if(
+lastClaim &&
+Date.now() -
+Number(lastClaim)
+< DAY
+){
+return;
+}
+
+let coins =
+parseInt(
+localStorage.getItem(
+"coins"
+)
+) || 0;
+
+coins += 20;
+
+localStorage.setItem(
+"coins",
+coins
+);
+
+localStorage.setItem(
+"dailyClaim",
+Date.now()
+);
+
+alert(
+"🎉 Daily Reward Claimed! +20 Coins"
+);
+
+updateCheckin();
+
+};
+
+updateCheckin();
+
+</script>
+
+</body>
+</html>
