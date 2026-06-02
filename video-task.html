@@ -17,7 +17,7 @@ font-family:Arial,sans-serif;
 body{
 background:#080811;
 color:white;
-padding:20px;
+padding:25px;
 }
 
 .header{
@@ -28,86 +28,97 @@ margin-bottom:30px;
 }
 
 .logo{
-font-size:32px;
+font-size:35px;
 font-weight:900;
-
-background:linear-gradient(
-90deg,
-#ffd700,
-#7b2cff
-);
-
+background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
 .back-btn{
-padding:10px 15px;
-background:#7b2cff;
+padding:12px 20px;
 border:none;
 border-radius:10px;
-color:white;
 cursor:pointer;
+background:#7b2cff;
+color:white;
 }
 
 .balance{
-background:#151522;
+background:linear-gradient(135deg,#160026,#2f0057);
 padding:20px;
-border-radius:15px;
+border-radius:20px;
 margin-bottom:25px;
-font-size:24px;
-font-weight:bold;
+text-align:center;
 }
 
-.tasks{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:20px;
+.balance h1{
+color:#ffd700;
+margin-top:10px;
 }
 
-.task-card{
+.info{
 background:#13131d;
-padding:20px;
-border-radius:18px;
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
 border:1px solid #222;
 }
 
-.task-card h3{
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+}
+
+.card{
+background:#13131d;
+border:1px solid #222;
+border-radius:18px;
+padding:20px;
+}
+
+.card h3{
 margin-bottom:10px;
 }
 
-.task-card p{
+.card p{
 color:#aaa;
 margin-bottom:15px;
 }
 
-.reward{
-background:#1f1f30;
-padding:8px 12px;
-display:inline-block;
-border-radius:10px;
-color:#00ff99;
+iframe{
+width:100%;
+height:220px;
+border:none;
+border-radius:12px;
 margin-bottom:15px;
 }
 
-.btn{
+.timer{
+margin-bottom:10px;
+color:#ffd700;
+font-weight:bold;
+}
+
+button{
 width:100%;
 padding:12px;
 border:none;
 border-radius:12px;
 cursor:pointer;
 font-size:16px;
-margin-top:10px;
-}
-
-.watch{
-background:#7b2cff;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
 color:white;
 }
 
-.claim{
-background:#00aa55;
-color:white;
+button:disabled{
+background:#444;
+cursor:not-allowed;
+}
+
+.completed{
+background:#00aa55 !important;
 }
 
 </style>
@@ -120,104 +131,108 @@ color:white;
 CoinTube
 </div>
 
-<button
-class="back-btn"
-onclick="location.href='home.html'"
->
-← Home
+<button class="back-btn"
+onclick="location.href='home.html'">
+🏠 Home
 </button>
 
 </div>
 
 <div class="balance">
 
-Coins:
-<span id="coins">0</span>
+<h2>Your Coins</h2>
+
+<h1 id="coinDisplay">
+0
+</h1>
 
 </div>
 
-<div class="tasks">
+<div class="info">
 
-<div class="task-card">
+<h3>📢 Rules</h3>
+
+<p>
+• Watch videos before claiming reward.<br>
+• Maximum 3 tasks every 12 hours.<br>
+• Each task rewards 10 coins.
+</p>
+
+</div>
+
+<div class="grid">
+
+<!-- TASK 1 -->
+
+<div class="card">
 
 <h3>🎥 Video Task #1</h3>
 
-<p>
-Watch this video and earn coins.
-</p>
+<iframe
+src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+allowfullscreen>
+</iframe>
 
-<div class="reward">
-+10 Coins
+<div
+class="timer"
+id="timer1">
+Watch for 30 seconds
 </div>
 
 <button
-class="btn watch"
-onclick="watchVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ')"
->
-Watch Video
-</button>
-
-<button
-class="btn claim"
-onclick="claimCoins(10)"
->
-Claim Coins
+id="btn1"
+onclick="startTask(1)">
+Start Watching
 </button>
 
 </div>
 
-<div class="task-card">
+<!-- TASK 2 -->
+
+<div class="card">
 
 <h3>🎥 Video Task #2</h3>
 
-<p>
-Complete video task reward.
-</p>
+<iframe
+src="https://www.youtube.com/embed/jNQXAC9IVRw"
+allowfullscreen>
+</iframe>
 
-<div class="reward">
-+10 Coins
+<div
+class="timer"
+id="timer2">
+Watch for 30 seconds
 </div>
 
 <button
-class="btn watch"
-onclick="watchVideo('https://www.youtube.com/watch?v=jNQXAC9IVRw')"
->
-Watch Video
-</button>
-
-<button
-class="btn claim"
-onclick="claimCoins(10)"
->
-Claim Coins
+id="btn2"
+onclick="startTask(2)">
+Start Watching
 </button>
 
 </div>
 
-<div class="task-card">
+<!-- TASK 3 -->
+
+<div class="card">
 
 <h3>🎥 Video Task #3</h3>
 
-<p>
-Watch and collect reward.
-</p>
+<iframe
+src="https://www.youtube.com/embed/M7lc1UVf-VE"
+allowfullscreen>
+</iframe>
 
-<div class="reward">
-+10 Coins
+<div
+class="timer"
+id="timer3">
+Watch for 30 seconds
 </div>
 
 <button
-class="btn watch"
-onclick="watchVideo('https://www.youtube.com/')"
->
-Watch Video
-</button>
-
-<button
-class="btn claim"
-onclick="claimCoins(10)"
->
-Claim Coins
+id="btn3"
+onclick="startTask(3)">
+Start Watching
 </button>
 
 </div>
@@ -226,38 +241,157 @@ Claim Coins
 
 <script>
 
+/* COINS */
+
 let coins =
 parseInt(
 localStorage.getItem("coins")
 ) || 0;
 
-document.getElementById("coins")
-.innerText = coins;
+document.getElementById(
+"coinDisplay"
+).innerText = coins;
 
-function watchVideo(url){
+/* RESET EVERY 12 HOURS */
 
-window.open(
-url,
-"_blank"
+const now = Date.now();
+
+const lastReset =
+localStorage.getItem("lastReset");
+
+if(
+!lastReset ||
+now - Number(lastReset)
+> 12 * 60 * 60 * 1000
+){
+
+localStorage.setItem(
+"completedTasks",
+JSON.stringify([])
+);
+
+localStorage.setItem(
+"lastReset",
+now
 );
 
 }
 
-function claimCoins(value){
+let completed =
+JSON.parse(
+localStorage.getItem(
+"completedTasks"
+)
+) || [];
 
-coins += value;
+/* LOAD COMPLETED */
+
+completed.forEach(task=>{
+
+const btn =
+document.getElementById(
+"btn"+task
+);
+
+btn.innerText =
+"Completed";
+
+btn.disabled = true;
+
+btn.classList.add(
+"completed"
+);
+
+});
+
+/* TASK */
+
+function startTask(id){
+
+if(
+completed.includes(id)
+){
+return;
+}
+
+let seconds = 30;
+
+const timer =
+document.getElementById(
+"timer"+id
+);
+
+const btn =
+document.getElementById(
+"btn"+id
+);
+
+btn.disabled = true;
+
+const interval =
+setInterval(()=>{
+
+seconds--;
+
+timer.innerText =
+"Remaining: "
++ seconds +
+" sec";
+
+if(seconds <= 0){
+
+clearInterval(
+interval
+);
+
+timer.innerText =
+"Reward Ready ✅";
+
+btn.disabled = false;
+
+btn.innerText =
+"Claim +10 Coins";
+
+btn.onclick = ()=>{
+
+coins += 10;
 
 localStorage.setItem(
 "coins",
 coins
 );
 
-document.getElementById("coins")
-.innerText = coins;
+document.getElementById(
+"coinDisplay"
+).innerText = coins;
+
+completed.push(id);
+
+localStorage.setItem(
+"completedTasks",
+JSON.stringify(
+completed
+)
+);
+
+btn.innerText =
+"Completed";
+
+btn.disabled = true;
+
+btn.classList.add(
+"completed"
+);
 
 alert(
-"+" + value + " Coins Added!"
+"+10 Coins Added!"
 );
+
+};
+
+}
+
+},1000);
 
 }
 
