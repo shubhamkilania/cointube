@@ -169,14 +169,17 @@ gap:20px;
 margin-bottom:30px;
 }
 .user{
+width:auto !important;
+padding:10px 16px;
 background:#1b1b25;
-padding:8px 12px;
-border-radius:10px;
+border:none;
+border-radius:12px;
+color:white;
 cursor:pointer;
 font-size:14px;
 font-weight:600;
-transition:0.3s;
 display:inline-block;
+flex:none;
 }
 
 .user:hover{
