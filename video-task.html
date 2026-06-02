@@ -1,109 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Video Tasks - CoinTube</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
 background:#080811;
 color:white;
-padding:25px;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
+font-family:Arial;
+padding:30px;
 }
 
 .logo{
-font-size:35px;
-font-weight:900;
+font-size:40px;
+font-weight:bold;
+text-align:center;
+margin-bottom:20px;
 background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-.back-btn{
-padding:12px 20px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-background:#7b2cff;
-color:white;
-}
-
-.balance{
-background:linear-gradient(135deg,#160026,#2f0057);
-padding:20px;
+.card{
+background:#111;
+padding:25px;
 border-radius:20px;
-margin-bottom:25px;
-text-align:center;
-}
-
-.balance h1{
-color:#ffd700;
-margin-top:10px;
-}
-
-.info{
-background:#13131d;
-padding:15px;
-border-radius:15px;
 margin-bottom:20px;
 border:1px solid #222;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-}
-
-.card{
-background:#13131d;
-border:1px solid #222;
-border-radius:18px;
-padding:20px;
-}
-
-.card h3{
+.task-title{
+font-size:24px;
 margin-bottom:10px;
+color:#00b7ff;
 }
 
-.card p{
-color:#aaa;
-margin-bottom:15px;
-}
-
-iframe{
-width:100%;
-height:220px;
-border:none;
-border-radius:12px;
-margin-bottom:15px;
-}
-
-.timer{
-margin-bottom:10px;
-color:#ffd700;
+.reward{
+color:#00ff99;
 font-weight:bold;
+margin-bottom:15px;
+}
+
+.status{
+margin-bottom:15px;
+color:#ffd700;
 }
 
 button{
 width:100%;
-padding:12px;
+padding:14px;
 border:none;
 border-radius:12px;
 cursor:pointer;
@@ -117,283 +64,162 @@ background:#444;
 cursor:not-allowed;
 }
 
-.completed{
-background:#00aa55 !important;
+.back{
+margin-bottom:20px;
 }
 
 </style>
 </head>
 <body>
 
-<div class="header">
+<div class="logo">CoinTube</div>
 
-<div class="logo">
-CoinTube
-</div>
-
-<button class="back-btn"
+<button class="back"
 onclick="location.href='home.html'">
-🏠 Home
+🏠 Back Home
 </button>
-
-</div>
-
-<div class="balance">
-
-<h2>Your Coins</h2>
-
-<h1 id="coinDisplay">
-0
-</h1>
-
-</div>
-
-<div class="info">
-
-<h3>📢 Rules</h3>
-
-<p>
-• Watch videos before claiming reward.<br>
-• Maximum 3 tasks every 12 hours.<br>
-• Each task rewards 10 coins.
-</p>
-
-</div>
-
-<div class="grid">
-
-<!-- TASK 1 -->
 
 <div class="card">
 
-<h3>🎥 Video Task #1</h3>
+<div class="task-title">
+🎥 Task 1
+</div>
 
-<iframe
-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-allowfullscreen>
-</iframe>
+<div class="reward">
++10 Coins
+</div>
 
 <div
-class="timer"
-id="timer1">
-Watch for 30 seconds
+class="status"
+id="status1">
+Available
 </div>
 
 <button
-id="btn1"
-onclick="startTask(1)">
-Start Watching
+id="task1"
+onclick="openTask(1)">
+Start Task
 </button>
 
 </div>
-
-<!-- TASK 2 -->
 
 <div class="card">
 
-<h3>🎥 Video Task #2</h3>
+<div class="task-title">
+🎥 Task 2
+</div>
 
-<iframe
-src="https://www.youtube.com/embed/jNQXAC9IVRw"
-allowfullscreen>
-</iframe>
+<div class="reward">
++10 Coins
+</div>
 
 <div
-class="timer"
-id="timer2">
-Watch for 30 seconds
+class="status"
+id="status2">
+Locked
 </div>
 
 <button
-id="btn2"
-onclick="startTask(2)">
-Start Watching
+id="task2"
+disabled
+onclick="openTask(2)">
+Start Task
 </button>
 
 </div>
-
-<!-- TASK 3 -->
 
 <div class="card">
 
-<h3>🎥 Video Task #3</h3>
+<div class="task-title">
+🎥 Task 3
+</div>
 
-<iframe
-src="https://www.youtube.com/embed/M7lc1UVf-VE"
-allowfullscreen>
-</iframe>
+<div class="reward">
++10 Coins
+</div>
 
 <div
-class="timer"
-id="timer3">
-Watch for 30 seconds
+class="status"
+id="status3">
+Locked
 </div>
 
 <button
-id="btn3"
-onclick="startTask(3)">
-Start Watching
+id="task3"
+disabled
+onclick="openTask(3)">
+Start Task
 </button>
-
-</div>
 
 </div>
 
 <script>
 
-/* COINS */
-
-let coins =
-parseInt(
-localStorage.getItem("coins")
-) || 0;
-
-document.getElementById(
-"coinDisplay"
-).innerText = coins;
-
-/* RESET EVERY 12 HOURS */
-
-const now = Date.now();
-
-const lastReset =
-localStorage.getItem("lastReset");
-
-if(
-!lastReset ||
-now - Number(lastReset)
-> 12 * 60 * 60 * 1000
-){
-
-localStorage.setItem(
-"completedTasks",
-JSON.stringify([])
-);
-
-localStorage.setItem(
-"lastReset",
-now
-);
-
-}
-
 let completed =
 JSON.parse(
-localStorage.getItem(
-"completedTasks"
-)
+localStorage.getItem("videoTasks")
 ) || [];
 
-/* LOAD COMPLETED */
+function loadTasks(){
 
-completed.forEach(task=>{
-
-const btn =
-document.getElementById(
-"btn"+task
-);
-
-btn.innerText =
-"Completed";
-
-btn.disabled = true;
-
-btn.classList.add(
-"completed"
-);
-
-});
-
-/* TASK */
-
-function startTask(id){
-
-if(
-completed.includes(id)
-){
-return;
-}
-
-let seconds = 30;
-
-const timer =
-document.getElementById(
-"timer"+id
-);
+for(let i=1;i<=3;i++){
 
 const btn =
 document.getElementById(
-"btn"+id
+"task"+i
 );
+
+const status =
+document.getElementById(
+"status"+i
+);
+
+if(completed.includes(i)){
+
+status.innerHTML =
+"✅ Completed";
 
 btn.disabled = true;
-
-const interval =
-setInterval(()=>{
-
-seconds--;
-
-timer.innerText =
-"Remaining: "
-+ seconds +
-" sec";
-
-if(seconds <= 0){
-
-clearInterval(
-interval
-);
-
-timer.innerText =
-"Reward Ready ✅";
-
-btn.disabled = false;
-
-btn.innerText =
-"Claim +10 Coins";
-
-btn.onclick = ()=>{
-
-coins += 10;
-
-localStorage.setItem(
-"coins",
-coins
-);
-
-document.getElementById(
-"coinDisplay"
-).innerText = coins;
-
-completed.push(id);
-
-localStorage.setItem(
-"completedTasks",
-JSON.stringify(
-completed
-)
-);
-
 btn.innerText =
 "Completed";
 
-btn.disabled = true;
-
-btn.classList.add(
-"completed"
-);
-
-alert(
-"+10 Coins Added!"
-);
-
-};
+}
 
 }
 
-},1000);
+if(completed.includes(1) &&
+!completed.includes(2)){
+
+task2.disabled = false;
+status2.innerHTML =
+"🟢 Available";
 
 }
+
+if(completed.includes(2) &&
+!completed.includes(3)){
+
+task3.disabled = false;
+status3.innerHTML =
+"🟢 Available";
+
+}
+
+}
+
+function openTask(task){
+
+localStorage.setItem(
+"currentTask",
+task
+);
+
+location.href =
+"watch-video.html";
+
+}
+
+loadTasks();
 
 </script>
 
