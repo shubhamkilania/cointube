@@ -1,17 +1,21 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 
 import {
   getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail
+}
+from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
 import {
   getFirestore,
   doc,
   setDoc,
   getDoc
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxUg2SvTSXMacfSwNnBfQPRRyq1nTvM6c",
@@ -33,8 +37,11 @@ export {
   app,
   auth,
   db,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
+
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+
   doc,
   setDoc,
   getDoc
