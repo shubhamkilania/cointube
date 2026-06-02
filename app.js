@@ -1,110 +1,113 @@
 import {
-  auth,
-  db,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  doc,
-  setDoc
+auth,
+db,
+createUserWithEmailAndPassword,
+doc,
+setDoc
 } from "./firebase-config.js";
 
-let confirmationResult;
-
-/* ---------------- STATUS ---------------- */
 function status(msg, color = "#bbb") {
-  const el = document.getElementById("statusText");
-  if (el) {
-    el.innerText = msg;
-    el.style.color = color;
-  }
+const el = document.getElementById("statusText");
+
+if (el) {
+el.innerText = msg;
+el.style.color = color;
+}
 }
 
-/* ---------------- RECAPTCHA ---------------- */
-function initRecaptcha() {
-  if (window.recaptchaVerifier) return;
+document
+.getElementById("registerBtn")
+.addEventListener("click", async () => {
 
-  window.recaptchaVerifier = new RecaptchaVerifier(
+const fullName =
+document.getElementById("fullName").value.trim();
+
+const email =
+document.getElementById("email").value.trim();
+
+const password =
+document.getElementById("password").value;
+
+const referral =
+document.getElementById("referralCode").value.trim();
+
+if (!fullName || !email || !password) {
+
+```
+status(
+  "Fill all required fields",
+  "red"
+);
+
+return;
+```
+
+}
+
+try {
+
+```
+status(
+  "Creating account...",
+  "#00b7ff"
+);
+
+const userCredential =
+  await createUserWithEmailAndPassword(
     auth,
-    "recaptcha-container",
-    {
-      size: "invisible"
-    }
+    email,
+    password
   );
 
-  window.recaptchaVerifier.render();
+const user = userCredential.user;
+
+await setDoc(
+  doc(db, "users", user.uid),
+  {
+    fullName: fullName,
+    email: email,
+    referral: referral || null,
+    uid: user.uid,
+    coins: 0,
+    createdAt: new Date()
+  }
+);
+
+localStorage.setItem(
+  "userLoggedIn",
+  "true"
+);
+
+localStorage.setItem(
+  "userEmail",
+  email
+);
+
+status(
+  "Registration Successful 🎉",
+  "#00ff99"
+);
+
+setTimeout(() => {
+
+  window.location.href =
+    "home.html";
+
+}, 1000);
+```
+
+} catch (error) {
+
+```
+console.error(error);
+
+status(
+  error.message,
+  "red"
+);
+```
+
 }
 
-document.addEventListener("DOMContentLoaded", initRecaptcha);
-
-/* ---------------- SEND OTP ---------------- */
-document.getElementById("sendOtpBtn").addEventListener("click", async () => {
-
-  const phone = document.getElementById("phoneNumber").value.trim();
-
-  if (!phone) {
-    status("Enter phone number", "red");
-    return;
-  }
-
-  try {
-    status("Sending OTP...", "#00b7ff");
-
-    confirmationResult = await signInWithPhoneNumber(
-      auth,
-      phone,
-      window.recaptchaVerifier
-    );
-
-    window.confirmationResult = confirmationResult;
-
-    status("OTP sent ✔", "#00ff99");
-
-  } catch (err) {
-    console.error(err);
-    status(err.message, "red");
-  }
-
 });
 
-/* ---------------- VERIFY + REGISTER ---------------- */
-document.getElementById("verifyBtn").addEventListener("click", async () => {
-
-  const otp = document.getElementById("otpCode").value;
-  const password = document.getElementById("password").value;
-  const phone = document.getElementById("phoneNumber").value;
-  const fullName = document.getElementById("fullName").value;
-  const referral = document.getElementById("referralCode").value;
-
-  if (!otp || !password) {
-    status("Fill all fields", "red");
-    return;
-  }
-
-  try {
-
-    const result = await window.confirmationResult.confirm(otp);
-
-    const user = result.user;
-
-    await setDoc(doc(db, "users", phone), {
-      fullName,
-      phone,
-      password,
-      referral: referral || null,
-      uid: user.uid,
-      createdAt: new Date()
-    });
-
-    status("Registered Successfully 🎉", "#00ff99");
-
-    localStorage.setItem("userLoggedIn", "true");
-
-    setTimeout(() => {
-      window.location.href = "home.html";
-    }, 1000);
-
-  } catch (err) {
-    console.error(err);
-    status(err.message, "red");
-  }
-
-});
