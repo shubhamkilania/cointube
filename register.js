@@ -58,24 +58,30 @@ document
 
     if(error) throw error;
 
-    const referralCode =
-      generateReferralCode(username);
+  const referralCode =
+  generateReferralCode(username);
 
-    await supabase
-    .from("users")
-    .insert([
-      {
-        username,
-        email,
-        coins:0,
-        money:0,
-        videos_watched:0,
-        referrals:0,
-        referral_code:referralCode,
-        referred_by:
-          referredBy || null
-      }
-    ]);
+await supabase
+.from("profiles")
+.insert({
+
+  id: data.user.id,
+
+  username: username,
+
+  coins: 0,
+
+  money: 0,
+
+  videos_watched: 0,
+
+  referrals: 0,
+
+  referral_code: referralCode,
+
+  referred_by: referredBy || null
+
+});
 
     status.innerText =
       "Account created. Check your email for verification.";
