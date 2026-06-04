@@ -7,33 +7,47 @@
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
 body{
 background:#080811;
-font-family:Arial,sans-serif;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-margin:0;
+min-height:100vh;
+padding:20px;
 color:white;
 }
 
 .box{
-width:400px;
+width:100%;
+max-width:420px;
 background:#111;
 padding:30px;
-border-radius:20px;
+border-radius:22px;
 border:1px solid #222;
+box-shadow:0 0 30px rgba(123,44,255,.15);
 }
 
 .logo{
-font-size:40px;
-font-weight:bold;
+font-size:42px;
+font-weight:900;
 text-align:center;
-margin-bottom:20px;
+margin-bottom:10px;
 background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+text-align:center;
+color:#999;
+margin-bottom:25px;
 }
 
 input{
@@ -44,70 +58,13 @@ border:none;
 border-radius:12px;
 background:#1c1c28;
 color:white;
-box-sizing:border-box;
+font-size:15px;
+}
+
+input:focus{
+outline:2px solid #7b2cff;
 }
 
 button{
 width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-cursor:pointer;
-background:linear-gradient(90deg,#7b2cff,#a855f7);
-color:white;
-font-size:16px;
-}
-
-#statusText{
-margin-top:15px;
-text-align:center;
-color:#ffd700;
-}
-
-.link{
-margin-top:15px;
-text-align:center;
-}
-
-a{
-color:#00b7ff;
-text-decoration:none;
-}
-
-</style>
-</head>
-<body>
-
-<div class="box">
-
-<div class="logo">CoinTube</div>
-
-<input id="username" placeholder="Username">
-
-<input id="email" type="email" placeholder="Email">
-
-<input id="password" type="password" placeholder="Password">
-
-<input id="referral" placeholder="Referral Code (Optional)">
-
-<button id="registerBtn">
-Create Account
-</button>
-
-<div id="statusText"></div>
-
-<div class="link">
-Already have an account?
-<a href="login.html">Login</a>
-</div>
-
-</div>
-
-<script type="module" src="register.js"></script>
-  
-<script type="module" src="auth-check.js"></script>
-  
-</body>
-</html>
-
-
+padding:14px
