@@ -1,9 +1,24 @@
 import { supabase } from "./supabase.js";
 
-const {
-  data: { session }
-} = await supabase.auth.getSession();
+try{
 
-if (!session) {
+  const {
+    data: { session },
+    error
+  } = await supabase.auth.getSession();
+
+  if(error){
+    throw error;
+  }
+
+  if(!session){
+    window.location.href = "login.html";
+  }
+
+}catch(err){
+
+  console.error(err);
+
   window.location.href = "login.html";
+
 }
