@@ -29,13 +29,11 @@ margin:auto;
 text-align:center;
 font-size:42px;
 font-weight:900;
-margin-bottom:20px;
+margin-bottom:25px;
 background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
-
-/* PROFILE CARD */
 
 .profile-card{
 background:linear-gradient(135deg,#200040,#0f1035);
@@ -57,7 +55,9 @@ background:linear-gradient(90deg,#7b2cff,#00b7ff);
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:50px;
+font-size:48px;
+font-weight:bold;
+color:white;
 }
 
 .profile-info h1{
@@ -78,8 +78,6 @@ color:#ffd700;
 font-weight:bold;
 }
 
-/* STATS */
-
 .stats{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
@@ -93,6 +91,12 @@ border:1px solid #222;
 border-radius:18px;
 padding:20px;
 text-align:center;
+transition:.3s;
+}
+
+.stat-card:hover{
+border-color:#7b2cff;
+transform:translateY(-3px);
 }
 
 .stat-card h3{
@@ -102,9 +106,8 @@ color:#aaa;
 
 .stat-card h1{
 font-size:32px;
+color:#ffd700;
 }
-
-/* MENU */
 
 .menu-card{
 background:#13131d;
@@ -130,25 +133,31 @@ color:#999;
 font-size:14px;
 }
 
-/* FOOTER */
-
 .footer{
 text-align:center;
 margin-top:25px;
 color:#666;
 }
 
-/* MOBILE */
-
 @media(max-width:768px){
 
 .profile-card{
-text-align:center;
 justify-content:center;
+text-align:center;
 }
 
 .profile-info{
 width:100%;
+}
+
+.avatar{
+width:90px;
+height:90px;
+font-size:40px;
+}
+
+.logo{
+font-size:34px;
 }
 
 }
@@ -163,33 +172,29 @@ width:100%;
 CoinTube
 </div>
 
-<!-- PROFILE -->
-
 <div class="profile-card">
 
-<div class="avatar">
-👤
+<div class="avatar" id="avatar">
+C
 </div>
 
 <div class="profile-info">
 
 <h1 id="username">
-CoinTube User
+Loading...
 </h1>
 
-<p>
-CoinTube Member
+<p id="email">
+Loading...
 </p>
 
 <div class="level">
-⭐ Level 1
+⭐ CoinTube Member
 </div>
 
 </div>
 
 </div>
-
-<!-- STATS -->
 
 <div class="stats">
 
@@ -215,42 +220,39 @@ CoinTube Member
 
 </div>
 
-<!-- PAGES -->
-
-<div class="menu-card"
-onclick="location.href='home.html'">
+<div class="menu-card" onclick="location.href='home.html'">
 <h3>🏠 Home</h3>
 <p>Return to dashboard</p>
 </div>
 
-<div class="menu-card"
-onclick="location.href='video-task.html'">
+<div class="menu-card" onclick="location.href='video-task.html'">
 <h3>🎥 Video Tasks</h3>
 <p>Watch videos and earn coins</p>
 </div>
 
-<div class="menu-card"
-onclick="location.href='daily-checkin.html'">
+<div class="menu-card" onclick="location.href='daily-checkin.html'">
 <h3>📅 Daily Check-In</h3>
-<p>Claim your daily reward</p>
+<p>Claim daily rewards</p>
 </div>
 
-<div class="menu-card"
-onclick="location.href='referral.html'">
+<div class="menu-card" onclick="location.href='referral.html'">
 <h3>👥 Referral System</h3>
-<p>Invite friends and earn more</p>
+<p>Invite friends and earn coins</p>
 </div>
 
-<div class="menu-card"
-onclick="location.href='leaderboard.html'">
+<div class="menu-card" onclick="location.href='leaderboard.html'">
 <h3>🏆 Leaderboard</h3>
-<p>View top earners</p>
+<p>View top users</p>
 </div>
 
-<div class="menu-card"
-onclick="location.href='withdraw.html'">
+<div class="menu-card" onclick="location.href='withdraw.html'">
 <h3>💰 Withdraw</h3>
-<p>Convert coins and manage withdrawals</p>
+<p>Manage withdrawals</p>
+</div>
+
+<div class="menu-card" onclick="logout()">
+<h3>🚪 Logout</h3>
+<p>Sign out from your account</p>
 </div>
 
 <div class="footer">
@@ -259,7 +261,33 @@ onclick="location.href='withdraw.html'">
 
 </div>
 
-<script>
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+async function loadProfile(){
+
+const {
+data:{user}
+} = await supabase.auth.getUser();
+
+if(!user){
+location.href = "login.html";
+return;
+}
+
+const username =
+user.user_metadata?.username ||
+user.email.split("@")[0];
+
+document.getElementById("username").innerText =
+username;
+
+document.getElementById("email").innerText =
+user.email;
+
+document.getElementById("avatar").innerText =
+username.charAt(0).toUpperCase();
 
 document.getElementById("coins").innerText =
 localStorage.getItem("coins") || 0;
@@ -273,12 +301,21 @@ localStorage.getItem("videosWatched") || 0;
 document.getElementById("referrals").innerText =
 localStorage.getItem("referrals") || 0;
 
-document.getElementById("username").innerText =
-localStorage.getItem("username") || "CoinTube User";
+}
+
+window.logout = async function(){
+
+await supabase.auth.signOut();
+
+location.href = "login.html";
+
+}
+
+loadProfile();
 
 </script>
-  
-</body>
-</html>
 
 <script type="module" src="auth-check.js"></script>
+
+</body>
+</html>
