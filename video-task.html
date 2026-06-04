@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Video Tasks - CoinTube</title>
 
 <style>
@@ -9,8 +10,9 @@
 body{
 background:#080811;
 color:white;
-font-family:Arial;
-padding:30px;
+font-family:Arial,sans-serif;
+padding:20px;
+margin:0;
 }
 
 .logo{
@@ -68,6 +70,12 @@ cursor:not-allowed;
 margin-bottom:20px;
 }
 
+.progress{
+font-size:18px;
+color:#00ff99;
+margin-top:10px;
+}
+
 </style>
 </head>
 <body>
@@ -80,22 +88,13 @@ onclick="location.href='home.html'">
 </button>
 
 <div class="card">
-
-<h2 style="color:#ffd700;">
-🎥 Video Progress
-</h2>
-
-<div
-id="progress"
-style="
-margin-top:10px;
-color:#00ff99;
-font-size:18px;
-">
+<h2 style="color:#ffd700;">🎯 Video Progress</h2>
+<div id="progress" class="progress">
 Loading...
 </div>
-
 </div>
+
+<div class="card">
 
 <div class="task-title">
 🎥 Task 1
@@ -105,15 +104,11 @@ Loading...
 +10 Coins
 </div>
 
-<div
-class="status"
-id="status1">
+<div class="status" id="status1">
 Available
 </div>
 
-<button
-id="task1"
-onclick="openTask(1)">
+<button id="task1" onclick="openTask(1)">
 Start Task
 </button>
 
@@ -129,16 +124,11 @@ Start Task
 +10 Coins
 </div>
 
-<div
-class="status"
-id="status2">
+<div class="status" id="status2">
 Locked
 </div>
 
-<button
-id="task2"
-disabled
-onclick="openTask(2)">
+<button id="task2" disabled onclick="openTask(2)">
 Start Task
 </button>
 
@@ -154,16 +144,11 @@ Start Task
 +10 Coins
 </div>
 
-<div
-class="status"
-id="status3">
+<div class="status" id="status3">
 Locked
 </div>
 
-<button
-id="task3"
-disabled
-onclick="openTask(3)">
+<button id="task3" disabled onclick="openTask(3)">
 Start Task
 </button>
 
@@ -171,7 +156,8 @@ Start Task
 
 <script>
 
-const RESET_TIME = 12 * 60 * 60 * 1000;
+const RESET_TIME =
+12 * 60 * 60 * 1000;
 
 let taskData =
 JSON.parse(
@@ -243,7 +229,6 @@ completed.includes(1) &&
 ){
 
 task2.disabled = false;
-
 status2.innerHTML =
 "🟢 Available";
 
@@ -255,7 +240,6 @@ completed.includes(2) &&
 ){
 
 task3.disabled = false;
-
 status3.innerHTML =
 "🟢 Available";
 
