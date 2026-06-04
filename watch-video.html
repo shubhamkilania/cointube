@@ -118,23 +118,48 @@ document.getElementById("timer");
 const claimBtn =
 document.getElementById("claimBtn");
 
+const currentTask =
+parseInt(
+localStorage.getItem("currentTask")
+);
+
+const completed =
+JSON.parse(
+localStorage.getItem("videoTasks")
+) || [];
+
+if(
+completed.includes(currentTask)
+){
+
+timer.innerHTML =
+"✅ Already Completed";
+
+claimBtn.disabled = true;
+
+claimBtn.innerHTML =
+"Completed";
+
+}
+
+else{
+
 const interval =
 setInterval(()=>{
 
 time--;
 
 timer.innerHTML =
-time + " sec";
+"⏳ " + time + " sec";
 
 if(time <= 0){
 
 clearInterval(interval);
 
 timer.innerHTML =
-"✅ Completed";
+"✅ Video Completed";
 
-claimBtn.disabled =
-false;
+claimBtn.disabled = false;
 
 claimBtn.innerHTML =
 "Claim Reward";
@@ -143,7 +168,26 @@ claimBtn.innerHTML =
 
 },1000);
 
+}
+
 claimBtn.onclick = ()=>{
+
+let completed =
+JSON.parse(
+localStorage.getItem("videoTasks")
+) || [];
+
+if(
+completed.includes(currentTask)
+){
+
+alert(
+"Task already completed"
+);
+
+return;
+
+}
 
 let coins =
 parseInt(
@@ -157,25 +201,19 @@ localStorage.setItem(
 coins
 );
 
-let currentTask =
+let videos =
 parseInt(
 localStorage.getItem(
-"currentTask"
+"videosWatched"
 )
+) || 0;
+
+videos++;
+
+localStorage.setItem(
+"videosWatched",
+videos
 );
-
-let completed =
-JSON.parse(
-localStorage.getItem(
-"videoTasks"
-)
-) || [];
-
-if(
-!completed.includes(
-currentTask
-)
-){
 
 completed.push(
 currentTask
@@ -188,10 +226,8 @@ completed
 )
 );
 
-}
-
 alert(
-"+10 Coins Added!"
+"🎉 +10 Coins Added"
 );
 
 location.href =
