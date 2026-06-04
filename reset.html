@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,52 +6,34 @@
 <title>Reset Password - CoinTube</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
 
 body{
-background:#050505;
+background:#080811;
+font-family:Arial,sans-serif;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+margin:0;
 color:white;
-padding:20px;
 }
 
 .box{
 width:400px;
 background:#111;
-padding:40px;
+padding:30px;
 border-radius:20px;
-border:1px solid #7b2cff;
-text-align:center;
-box-shadow:0 0 25px rgba(123,44,255,.3);
+border:1px solid #222;
 }
 
 .logo{
-font-size:38px;
-font-weight:900;
-margin-bottom:15px;
-
-background:linear-gradient(
-90deg,
-#7b2cff,
-#00b7ff,
-#ffd700
-);
-
+font-size:40px;
+font-weight:bold;
+text-align:center;
+margin-bottom:20px;
+background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-}
-
-.subtitle{
-color:#bbb;
-margin-bottom:25px;
 }
 
 input{
@@ -60,70 +41,51 @@ width:100%;
 padding:14px;
 margin-bottom:15px;
 border:none;
-border-radius:10px;
-background:#1a1a1a;
+border-radius:12px;
+background:#1c1c28;
 color:white;
-}
-
-input:focus{
-outline:1px solid #7b2cff;
+box-sizing:border-box;
 }
 
 button{
 width:100%;
 padding:14px;
 border:none;
-border-radius:10px;
-
-background:linear-gradient(
-90deg,
-#7b2cff,
-#a855f7
-);
-
-color:white;
+border-radius:12px;
 cursor:pointer;
-}
-
-button:hover{
-opacity:.9;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
+color:white;
+font-size:16px;
 }
 
 #status{
 margin-top:15px;
-font-size:14px;
-color:#bbb;
+text-align:center;
+color:#ffd700;
 }
 
-.back{
-margin-top:20px;
+.link{
+margin-top:15px;
+text-align:center;
 }
 
-.back a{
+a{
 color:#00b7ff;
 text-decoration:none;
 }
+
 </style>
-
 </head>
-
 <body>
 
 <div class="box">
 
-<div class="logo">
-CoinTube
-</div>
-
-<p class="subtitle">
-Enter your registered email address
-</p>
+<div class="logo">CoinTube</div>
 
 <input
 id="email"
 type="email"
-placeholder="Email Address"
-
+placeholder="Enter your email"
 >
 
 <button id="resetBtn">
@@ -132,7 +94,7 @@ Send Reset Link
 
 <div id="status"></div>
 
-<div class="back">
+<div class="link">
 <a href="login.html">
 Back to Login
 </a>
@@ -142,60 +104,46 @@ Back to Login
 
 <script type="module">
 
-import {
-auth,
-sendPasswordResetEmail
-}
-from "./firebase-config.js";
-
-function status(msg,color="#bbb"){
-const el=document.getElementById("status");
-el.innerText=msg;
-el.style.color=color;
-}
+import { supabase } from "./supabase.js";
 
 document
 .getElementById("resetBtn")
-.addEventListener("click",async()=>{
+.addEventListener("click", async () => {
 
-const email=
-document.getElementById("email").value.trim();
+const email =
+document.getElementById("email")
+.value.trim();
+
+const status =
+document.getElementById("status");
 
 if(!email){
 
-status(
-"Enter your email address",
-"red"
-);
+status.innerText =
+"Enter your email";
 
 return;
+
 }
 
 try{
 
-status(
-"Sending reset link...",
-"#00b7ff"
-);
-
-await sendPasswordResetEmail(
-auth,
+const { error } =
+await supabase.auth.resetPasswordForEmail(
 email
 );
 
-status(
-"Password reset email sent ✔",
-"#00ff99"
-);
+if(error) throw error;
 
-}catch(error){
+status.innerText =
+"Password reset email sent. Check your inbox.";
 
-console.error(error);
+}catch(err){
 
-status(
-error.message,
-"red"
-);
+console.error(err);
+
+status.innerText =
+err.message;
 
 }
 
@@ -205,4 +153,3 @@ error.message,
 
 </body>
 </html>
-
