@@ -81,6 +81,22 @@ onclick="location.href='home.html'">
 
 <div class="card">
 
+<h2 style="color:#ffd700;">
+🎥 Video Progress
+</h2>
+
+<div
+id="progress"
+style="
+margin-top:10px;
+color:#00ff99;
+font-size:18px;
+">
+Loading...
+</div>
+
+</div>
+
 <div class="task-title">
 🎥 Task 1
 </div>
@@ -155,12 +171,45 @@ Start Task
 
 <script>
 
-let completed =
+const RESET_TIME = 12 * 60 * 60 * 1000;
+
+let taskData =
 JSON.parse(
-localStorage.getItem("videoTasks")
-) || [];
+localStorage.getItem("videoTaskData")
+) || {
+completed: [],
+lastReset: Date.now()
+};
+
+function resetTasksIfNeeded(){
+
+const now = Date.now();
+
+if(
+now - taskData.lastReset >
+RESET_TIME
+){
+
+taskData = {
+completed: [],
+lastReset: now
+};
+
+localStorage.setItem(
+"videoTaskData",
+JSON.stringify(taskData)
+);
+
+}
+
+}
 
 function loadTasks(){
+
+resetTasksIfNeeded();
+
+const completed =
+taskData.completed;
 
 for(let i=1;i<=3;i++){
 
@@ -180,6 +229,7 @@ status.innerHTML =
 "✅ Completed";
 
 btn.disabled = true;
+
 btn.innerText =
 "Completed";
 
@@ -187,21 +237,62 @@ btn.innerText =
 
 }
 
-if(completed.includes(1) &&
-!completed.includes(2)){
+if(
+completed.includes(1) &&
+!completed.includes(2)
+){
 
 task2.disabled = false;
+
 status2.innerHTML =
 "🟢 Available";
 
 }
 
-if(completed.includes(2) &&
-!completed.includes(3)){
+if(
+completed.includes(2) &&
+!completed.includes(3)
+){
 
 task3.disabled = false;
+
 status3.innerHTML =
 "🟢 Available";
+
+}
+
+if(completed.length === 3){
+
+let remaining =
+RESET_TIME -
+(
+Date.now() -
+taskData.lastReset
+);
+
+let hours =
+Math.floor(
+remaining /
+(1000*60*60)
+);
+
+document.getElementById(
+"progress"
+).innerHTML =
+"⏳ All tasks completed. New tasks in "
++ hours +
+" hours";
+
+}else{
+
+document.getElementById(
+"progress"
+).innerHTML =
+"🎯 Completed "
++
+completed.length
++
+"/3 Tasks";
 
 }
 
