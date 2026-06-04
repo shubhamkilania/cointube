@@ -7,33 +7,48 @@
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
 body{
 background:#080811;
-font-family:Arial,sans-serif;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-margin:0;
+min-height:100vh;
+padding:20px;
 color:white;
 }
 
 .box{
-width:400px;
+width:100%;
+max-width:420px;
 background:#111;
 padding:30px;
-border-radius:20px;
+border-radius:22px;
 border:1px solid #222;
+box-shadow:0 0 30px rgba(123,44,255,.15);
 }
 
 .logo{
-font-size:40px;
-font-weight:bold;
+font-size:42px;
+font-weight:900;
 text-align:center;
-margin-bottom:20px;
+margin-bottom:10px;
 background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+text-align:center;
+color:#999;
+margin-bottom:25px;
+line-height:1.6;
 }
 
 input{
@@ -44,7 +59,11 @@ border:none;
 border-radius:12px;
 background:#1c1c28;
 color:white;
-box-sizing:border-box;
+font-size:15px;
+}
+
+input:focus{
+outline:2px solid #7b2cff;
 }
 
 button{
@@ -56,16 +75,25 @@ cursor:pointer;
 background:linear-gradient(90deg,#7b2cff,#a855f7);
 color:white;
 font-size:16px;
+font-weight:bold;
+transition:.3s;
+}
+
+button:hover{
+opacity:.9;
 }
 
 #status{
 margin-top:15px;
 text-align:center;
+padding:10px;
+border-radius:10px;
+font-size:14px;
 color:#ffd700;
 }
 
 .link{
-margin-top:15px;
+margin-top:20px;
 text-align:center;
 }
 
@@ -74,13 +102,24 @@ color:#00b7ff;
 text-decoration:none;
 }
 
+a:hover{
+text-decoration:underline;
+}
+
 </style>
 </head>
 <body>
 
 <div class="box">
 
-<div class="logo">CoinTube</div>
+<div class="logo">
+CoinTube
+</div>
+
+<div class="subtitle">
+Enter your registered email address.<br>
+We'll send you a password reset link.
+</div>
 
 <input
 id="email"
@@ -89,14 +128,14 @@ placeholder="Enter your email"
 >
 
 <button id="resetBtn">
-Send Reset Link
+📧 Send Reset Link
 </button>
 
 <div id="status"></div>
 
 <div class="link">
 <a href="login.html">
-Back to Login
+← Back to Login
 </a>
 </div>
 
@@ -120,11 +159,14 @@ document.getElementById("status");
 if(!email){
 
 status.innerText =
-"Enter your email";
+"Please enter your email address.";
 
 return;
 
 }
+
+status.innerText =
+"Sending reset link...";
 
 try{
 
@@ -136,24 +178,20 @@ email
 if(error) throw error;
 
 status.innerText =
-"Password reset email sent. Check your inbox.";
+"✅ Password reset email sent. Check your inbox and spam folder.";
 
 }catch(err){
 
 console.error(err);
 
 status.innerText =
-err.message;
+"❌ " + err.message;
 
 }
 
 });
 
 </script>
- 
-<script type="module" src="auth-check.js"></script>
- 
+
 </body>
 </html>
-
-
