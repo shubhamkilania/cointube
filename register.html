@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - CoinTube</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050505;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+color:white;
+padding:20px;
+}
+
+.register-box{
+width:450px;
+background:#111;
+padding:40px;
+border-radius:20px;
+border:1px solid #7b2cff;
+box-shadow:0 0 20px rgba(123,44,255,.3);
+}
+
+.logo{
+text-align:center;
+font-size:52px;
+font-weight:900;
+margin-bottom:10px;
+
+background:linear-gradient(
+90deg,
+#7b2cff,
+#00b7ff,
+#ffd700
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+text-align:center;
+color:#bbb;
+margin-bottom:30px;
+font-size:18px;
+}
+
+input{
+width:100%;
+padding:15px;
+margin-bottom:15px;
+border:none;
+border-radius:12px;
+background:#1a1a1a;
+color:white;
+font-size:15px;
+}
+
+input:focus{
+outline:1px solid #7b2cff;
+}
+
+.register-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+background:linear-gradient(
+90deg,
+#7b2cff,
+#a855f7
+);
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+.register-btn:hover{
+opacity:.9;
+}
+
+.login-link{
+text-align:center;
+margin-top:20px;
+}
+
+.login-link a{
+color:#00b7ff;
+text-decoration:none;
+}
+
+#statusText{
+text-align:center;
+margin-top:15px;
+min-height:20px;
+color:#bbb;
+font-size:14px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="register-box">
+
+<div class="logo">
+CoinTube
+</div>
+
+<p class="subtitle">
+Create Your Account
+</p>
+
+<input
+id="fullName"
+type="text"
+placeholder="Full Name"
+required
+
+>
+
+<input
+id="email"
+type="email"
+placeholder="Email Address"
+required
+
+>
+
+<input
+id="password"
+type="password"
+placeholder="Create Password (min 6 characters)"
+required
+
+>
+
+<input
+id="referralCode"
+type="text"
+placeholder="Referral Code (Optional)"
+
+>
+
+<button
+class="register-btn"
+id="registerBtn"
+
+>
+
+Register </button>
+
+<div id="statusText"></div>
+
+<div class="login-link">
+Already have an account?
+<a href="login.html">
+Login
+</a>
+</div>
+
+</div>
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
