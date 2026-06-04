@@ -27,10 +27,10 @@ margin:auto;
 
 .logo{
 text-align:center;
-font-size:42px;
+font-size:48px;
 font-weight:900;
 margin-bottom:25px;
-background:linear-gradient(90deg,#ffd700,#7b2cff);
+background:linear-gradient(90deg,#ffd700,#7b2cff,#a855f7);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
@@ -39,6 +39,7 @@ background:linear-gradient(90deg,#ffd700,#7b2cff);
 text-align:center;
 font-size:32px;
 margin-bottom:25px;
+color:#ffffff;
 }
 
 .top3{
@@ -54,18 +55,17 @@ border-radius:20px;
 text-align:center;
 }
 
-.gold{
+.first{
 background:linear-gradient(135deg,#ffd700,#ffb700);
 color:black;
 }
 
-.silver{
-background:linear-gradient(135deg,#d7d7d7,#a8a8a8);
-color:black;
+.second{
+background:linear-gradient(135deg,#7b2cff,#a855f7);
 }
 
-.bronze{
-background:linear-gradient(135deg,#cd7f32,#9c5c21);
+.third{
+background:linear-gradient(135deg,#3f1d72,#5b21b6);
 }
 
 .winner h2{
@@ -77,15 +77,11 @@ margin-bottom:10px;
 margin-bottom:10px;
 }
 
-.winner p{
-font-weight:bold;
-}
-
 .board{
 background:#13131d;
 border-radius:20px;
 overflow:hidden;
-border:1px solid #222;
+border:1px solid #2b2b3b;
 margin-bottom:25px;
 }
 
@@ -101,12 +97,8 @@ border-bottom:none;
 }
 
 .rank{
-font-weight:bold;
 color:#ffd700;
-}
-
-.me{
-background:#1d1430;
+font-weight:bold;
 }
 
 .my-card{
@@ -117,24 +109,21 @@ margin-bottom:25px;
 text-align:center;
 }
 
-.my-card h2{
-margin-bottom:15px;
-}
-
-.my-coins{
-font-size:40px;
+.my-rank{
+font-size:42px;
 font-weight:bold;
 color:#ffd700;
+margin:10px 0;
 }
 
 .notice{
 background:#13131d;
 padding:20px;
 border-radius:15px;
-margin-bottom:25px;
-color:#bbb;
-text-align:center;
 border:1px solid #222;
+text-align:center;
+color:#bbb;
+margin-bottom:25px;
 }
 
 button{
@@ -152,19 +141,25 @@ button:hover{
 opacity:.9;
 }
 
+.loading{
+text-align:center;
+padding:20px;
+color:#bbb;
+}
+
 @media(max-width:768px){
 
 .title{
 font-size:26px;
 }
 
-.my-coins{
-font-size:30px;
+.row{
+font-size:14px;
+padding:12px;
 }
 
-.row{
-padding:12px;
-font-size:14px;
+.my-rank{
+font-size:32px;
 }
 
 }
@@ -180,73 +175,35 @@ CoinTube
 </div>
 
 <h1 class="title">
-🏆 Leaderboard
+🏆 Global Leaderboard
 </h1>
 
 <div class="top3">
 
-<div class="winner gold">
+<div class="winner first">
 <h2>🥇</h2>
-<h3>CryptoKing</h3>
-<p>12,500 Coins</p>
+<h3 id="firstName">Loading...</h3>
+<p id="firstCoins">0 Coins</p>
 </div>
 
-<div class="winner silver">
+<div class="winner second">
 <h2>🥈</h2>
-<h3>CoinMaster</h3>
-<p>9,800 Coins</p>
+<h3 id="secondName">Loading...</h3>
+<p id="secondCoins">0 Coins</p>
 </div>
 
-<div class="winner bronze">
+<div class="winner third">
 <h2>🥉</h2>
-<h3>VideoBoss</h3>
-<p>8,500 Coins</p>
+<h3 id="thirdName">Loading...</h3>
+<p id="thirdCoins">0 Coins</p>
 </div>
 
 </div>
 
-<div class="board">
+<div class="board" id="leaderboard">
 
-<div class="row">
-<span class="rank">#4</span>
-<span>EarnPro</span>
-<span>7000</span>
-</div>
-
-<div class="row">
-<span class="rank">#5</span>
-<span>RewardHunter</span>
-<span>6200</span>
-</div>
-
-<div class="row">
-<span class="rank">#6</span>
-<span>TaskWinner</span>
-<span>5800</span>
-</div>
-
-<div class="row">
-<span class="rank">#7</span>
-<span>CoinCollector</span>
-<span>5400</span>
-</div>
-
-<div class="row">
-<span class="rank">#8</span>
-<span>VideoStar</span>
-<span>5100</span>
-</div>
-
-<div class="row">
-<span class="rank">#9</span>
-<span>DailyWinner</span>
-<span>4700</span>
-</div>
-
-<div class="row me">
-<span class="rank">#10</span>
-<span>You</span>
-<span id="myCoins">0</span>
+<div class="loading">
+Loading Leaderboard...
 </div>
 
 </div>
@@ -255,18 +212,19 @@ CoinTube
 
 <h2>👤 Your Ranking</h2>
 
-<div class="my-coins" id="myCoinsBig">
-0
+<div class="my-rank" id="myRank">
+#--
 </div>
 
-<p style="margin-top:10px;color:#bbb;">
-Keep completing tasks to climb the leaderboard.
+<p id="myCoins">
+0 Coins
 </p>
 
 </div>
 
 <div class="notice">
-⚠ Demo Leaderboard. Real global rankings will be available after the account system is launched.
+🚀 Rankings are now connected to CoinTube accounts.<br><br>
+Earn more coins by completing tasks and watching videos.
 </div>
 
 <button onclick="location.href='home.html'">
@@ -275,22 +233,147 @@ Keep completing tasks to climb the leaderboard.
 
 </div>
 
-<script>
+<script type="module">
 
-let coins =
-parseInt(localStorage.getItem("coins")) || 0;
+import { supabase } from "./supabase.js";
 
-document.getElementById("myCoins").innerText =
-coins;
+async function loadLeaderboard(){
 
-document.getElementById("myCoinsBig").innerText =
-coins + " Coins";
+const {
+data: users,
+error
+} = await supabase
+.from("users")
+.select("*")
+.order("coins",{
+ascending:false
+});
+
+if(error){
+
+console.error(error);
+return;
+
+}
+
+if(!users || users.length === 0){
+
+document.getElementById(
+"leaderboard"
+).innerHTML =
+"<div class='loading'>No users found.</div>";
+
+return;
+
+}
+
+if(users[0]){
+
+document.getElementById(
+"firstName"
+).innerText =
+users[0].username;
+
+document.getElementById(
+"firstCoins"
+).innerText =
+users[0].coins + " Coins";
+
+}
+
+if(users[1]){
+
+document.getElementById(
+"secondName"
+).innerText =
+users[1].username;
+
+document.getElementById(
+"secondCoins"
+).innerText =
+users[1].coins + " Coins";
+
+}
+
+if(users[2]){
+
+document.getElementById(
+"thirdName"
+).innerText =
+users[2].username;
+
+document.getElementById(
+"thirdCoins"
+).innerText =
+users[2].coins + " Coins";
+
+}
+
+let html = "";
+
+users.forEach((user,index)=>{
+
+html += `
+
+<div class="row">
+
+<span class="rank">
+#${index + 1}
+</span>
+
+<span>
+${user.username}
+</span>
+
+<span>
+${user.coins}
+</span>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"leaderboard"
+).innerHTML = html;
+
+const {
+data:{user}
+} = await supabase.auth.getUser();
+
+if(user){
+
+const myIndex =
+users.findIndex(
+u => u.email === user.email
+);
+
+if(myIndex !== -1){
+
+document.getElementById(
+"myRank"
+).innerText =
+"#" + (myIndex + 1);
+
+document.getElementById(
+"myCoins"
+).innerText =
+users[myIndex].coins +
+" Coins";
+
+}
+
+}
+
+}
+
+loadLeaderboard();
 
 </script>
-  
+
 <script type="module" src="auth-check.js"></script>
-  
+
 </body>
 </html>
-
-
