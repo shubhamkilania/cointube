@@ -16,9 +16,12 @@ document
     document.getElementById("statusText");
 
   if(!email || !password){
+
     status.innerText =
       "Enter email and password";
+
     return;
+
   }
 
   try{
@@ -34,10 +37,8 @@ document
 
     if(error) throw error;
 
-    localStorage.setItem(
-      "userEmail",
-      email
-    );
+    status.innerText =
+      "Login successful";
 
     window.location.href =
       "home.html";
