@@ -1,31 +1,72 @@
-// Save user
-export function saveUser(user) {
-  localStorage.setItem(
-    "cointube_user",
-    JSON.stringify(user)
-  );
+import { supabase } from "./supabase.js";
+
+export async function createUser(userData){
+
+  const { error } =
+  await supabase
+  .from("users")
+  .insert([userData]);
+
+  if(error){
+    throw error;
+  }
+
 }
 
-// Get user
-export function getUser() {
-  return JSON.parse(
-    localStorage.getItem("cointube_user")
-  );
+export async function getUser(email){
+
+  const { data, error } =
+  await supabase
+  .from("users")
+  .select("*")
+  .eq("email", email)
+  .single();
+
+  if(error){
+    return null;
+  }
+
+  return data;
 }
 
-// Update coins
-export function updateCoins(amount) {
+export async function updateCoins(
+  email,
+  coins
+){
 
-  let user = getUser();
+  await supabase
+  .from("users")
+  .update({
+    coins: coins
+  })
+  .eq("email", email);
 
-  if (!user) return;
-
-  user.coins += amount;
-
-  saveUser(user);
 }
 
-// Logout
-export function logout() {
-  localStorage.removeItem("cointube_user");
+export async function updateVideos(
+  email,
+  count
+){
+
+  await supabase
+  .from("users")
+  .update({
+    videos_watched: count
+  })
+  .eq("email", email);
+
+}
+
+export async function getLeaderboard(){
+
+  const { data } =
+  await supabase
+  .from("users")
+  .select("*")
+  .order("coins", {
+    ascending:false
+  });
+
+  return data || [];
+
 }
