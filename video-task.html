@@ -284,7 +284,29 @@ completed.length
 
 function openTask(task){
 
-localStorage.setItem(
+const {
+data:{user}
+} = await supabase.auth.getUser();
+
+const { data:profile } =
+await supabase
+.from("profiles")
+.select("*")
+.eq("id",user.id)
+.single();
+
+await supabase
+.from("profiles")
+.update({
+
+coins:
+profile.coins + 10,
+
+videos_watched:
+profile.videos_watched + 1
+
+})
+.eq("id",user.id);
 "currentTask",
 task
 );
