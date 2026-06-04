@@ -96,21 +96,3 @@ await supabase
   }
 
 });
-
-await supabase
-.from("profiles")
-.insert({
-
-id: data.user.id,
-
-username: username,
-
-coins: 0,
-
-money: 0,
-
-videos_watched: 0,
-
-referrals: 0
-
-});
