@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,173 +6,104 @@
 <title>Register - CoinTube</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
 
 body{
-background:#050505;
+background:#080811;
+font-family:Arial,sans-serif;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:100vh;
+height:100vh;
+margin:0;
 color:white;
-padding:20px;
 }
 
-.register-box{
-width:450px;
+.box{
+width:400px;
 background:#111;
-padding:40px;
+padding:30px;
 border-radius:20px;
-border:1px solid #7b2cff;
-box-shadow:0 0 20px rgba(123,44,255,.3);
+border:1px solid #222;
 }
 
 .logo{
+font-size:40px;
+font-weight:bold;
 text-align:center;
-font-size:52px;
-font-weight:900;
-margin-bottom:10px;
-
-background:linear-gradient(
-90deg,
-#7b2cff,
-#00b7ff,
-#ffd700
-);
-
+margin-bottom:20px;
+background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-.subtitle{
-text-align:center;
-color:#bbb;
-margin-bottom:30px;
-font-size:18px;
-}
-
 input{
 width:100%;
-padding:15px;
+padding:14px;
 margin-bottom:15px;
 border:none;
 border-radius:12px;
-background:#1a1a1a;
+background:#1c1c28;
 color:white;
-font-size:15px;
+box-sizing:border-box;
 }
 
-input:focus{
-outline:1px solid #7b2cff;
-}
-
-.register-btn{
+button{
 width:100%;
-padding:15px;
+padding:14px;
 border:none;
 border-radius:12px;
-background:linear-gradient(
-90deg,
-#7b2cff,
-#a855f7
-);
-color:white;
-font-size:18px;
 cursor:pointer;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
+color:white;
+font-size:16px;
 }
 
-.register-btn:hover{
-opacity:.9;
-}
-
-.login-link{
+#statusText{
+margin-top:15px;
 text-align:center;
-margin-top:20px;
+color:#ffd700;
 }
 
-.login-link a{
+.link{
+margin-top:15px;
+text-align:center;
+}
+
+a{
 color:#00b7ff;
 text-decoration:none;
 }
 
-#statusText{
-text-align:center;
-margin-top:15px;
-min-height:20px;
-color:#bbb;
-font-size:14px;
-}
 </style>
-
 </head>
 <body>
 
-<div class="register-box">
+<div class="box">
 
-<div class="logo">
-CoinTube
-</div>
+<div class="logo">CoinTube</div>
 
-<p class="subtitle">
-Create Your Account
-</p>
+<input id="username" placeholder="Username">
 
-<input
-id="fullName"
-type="text"
-placeholder="Full Name"
-required
+<input id="email" type="email" placeholder="Email">
 
->
+<input id="password" type="password" placeholder="Password">
 
-<input
-id="email"
-type="email"
-placeholder="Email Address"
-required
+<input id="referral" placeholder="Referral Code (Optional)">
 
->
-
-<input
-id="password"
-type="password"
-placeholder="Create Password (min 6 characters)"
-required
-
->
-
-<input
-id="referralCode"
-type="text"
-placeholder="Referral Code (Optional)"
-
->
-
-<button
-class="register-btn"
-id="registerBtn"
-
->
-
-Register </button>
+<button id="registerBtn">
+Create Account
+</button>
 
 <div id="statusText"></div>
 
-<div class="login-link">
+<div class="link">
 Already have an account?
-<a href="login.html">
-Login
-</a>
+<a href="login.html">Login</a>
 </div>
 
 </div>
 
-<script type="module" src="app.js"></script>
+<script type="module" src="register.js"></script>
 
 </body>
 </html>
