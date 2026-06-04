@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,53 +7,33 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
-background:#050505;
+background:#080811;
+font-family:Arial,sans-serif;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+margin:0;
 color:white;
-padding:20px;
 }
 
-.login-box{
+.box{
 width:400px;
 background:#111;
-padding:40px;
+padding:30px;
 border-radius:20px;
-border:1px solid #7b2cff;
-box-shadow:0 0 20px rgba(123,44,255,.3);
+border:1px solid #222;
 }
 
 .logo{
-text-align:center;
 font-size:40px;
-font-weight:900;
-margin-bottom:10px;
-
-background:linear-gradient(
-90deg,
-#7b2cff,
-#00b7ff,
-#ffd700
-);
-
+font-weight:bold;
+text-align:center;
+margin-bottom:20px;
+background:linear-gradient(90deg,#ffd700,#7b2cff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-}
-
-.subtitle{
-text-align:center;
-color:#bbb;
-margin-bottom:30px;
 }
 
 input{
@@ -62,101 +41,63 @@ width:100%;
 padding:14px;
 margin-bottom:15px;
 border:none;
-border-radius:10px;
-background:#1a1a1a;
+border-radius:12px;
+background:#1c1c28;
 color:white;
+box-sizing:border-box;
 }
 
-input:focus{
-outline:1px solid #7b2cff;
-}
-
-.login-btn{
+button{
 width:100%;
 padding:14px;
 border:none;
-border-radius:10px;
-background:#7b2cff;
+border-radius:12px;
+cursor:pointer;
+background:linear-gradient(90deg,#7b2cff,#a855f7);
 color:white;
 font-size:16px;
-cursor:pointer;
 }
 
-.login-btn:hover{
-opacity:.9;
-}
-
-.register-link{
+#statusText{
+margin-top:15px;
 text-align:center;
-margin-top:20px;
+color:#ffd700;
 }
 
-.register-link a{
+.link{
+margin-top:15px;
+text-align:center;
+}
+
+a{
 color:#00b7ff;
 text-decoration:none;
 }
 
-#statusText{
-text-align:center;
-margin-top:15px;
-color:#bbb;
-}
-
 </style>
-
 </head>
 <body>
 
-<div class="login-box">
+<div class="box">
 
-<div class="logo">
-CoinTube
-</div>
+<div class="logo">CoinTube</div>
 
-<p class="subtitle">
-Login to your account
-</p>
+<input id="email" type="email" placeholder="Email">
 
-<input
-id="email"
-type="email"
-placeholder="Email Address"
+<input id="password" type="password" placeholder="Password">
 
->
-
-<input
-id="password"
-type="password"
-placeholder="Password"
-
->
-
-<button
-class="login-btn"
-id="loginBtn"
-
->
-
-Login </button>
+<button id="loginBtn">
+Login
+</button>
 
 <div id="statusText"></div>
 
-<div class="register-link">
-<a href="reset.html">
-Forgot Password?
-</a>
-</div>
-
-<div class="register-link">
+<div class="link">
 Don't have an account?
-<a href="register.html">
-Register
-</a>
+<a href="register.html">Register</a>
 </div>
 
 </div>
-
-<script type="module" src="firebase-config.js"></script>
 
 <script type="module" src="login.js"></script>
 
