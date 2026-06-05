@@ -77,9 +77,7 @@ await supabase
 
   referrals: 0,
 
-  referral_code: referralCode,
-
-  referred_by: referredBy || null
+  referral_code: referralCode
 
 });
 
