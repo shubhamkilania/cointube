@@ -10,3 +10,7 @@ async function logout(){
 }
 
 window.logout = logout;
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click", logout);
