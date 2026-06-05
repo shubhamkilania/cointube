@@ -1,24 +1,24 @@
 import { supabase } from "./supabase.js";
 
-try{
+const publicPages = [
+  "login.html",
+  "register.html",
+  "reset.html"
+];
+
+const currentPage =
+window.location.pathname
+.split("/")
+.pop();
+
+if(!publicPages.includes(currentPage)){
 
   const {
-    data: { session },
-    error
+    data:{ session }
   } = await supabase.auth.getSession();
-
-  if(error){
-    throw error;
-  }
 
   if(!session){
     window.location.href = "login.html";
   }
-
-}catch(err){
-
-  console.error(err);
-
-  window.location.href = "login.html";
 
 }
