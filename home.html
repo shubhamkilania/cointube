@@ -205,7 +205,7 @@ color:#666;
 
 <div class="logo">CoinTube</div>
 
-<a href="home.html">🏠 Home</a> <a href="video-task.html">🎥 Video Tasks</a> <a href="daily-checkin.html">📅 Daily Check-In</a> <a href="referral.html">👥 Referral</a> <a href="leaderboard.html">🏆 Leaderboard</a> <a href="withdraw.html">💰 Withdraw</a><button onclick="logout()">
+<a href="home.html">🏠 Home</a> <a href="video-task.html">🎥 Video Tasks</a> <a href="daily-checkin.html">📅 Daily Check-In</a> <a href="referral.html">👥 Referral</a> <a href="leaderboard.html">🏆 Leaderboard</a> <a href="withdraw.html">💰 Withdraw</a> <button id="logoutBtn">
 🚪 Logout
 </button>
 
@@ -359,17 +359,26 @@ async function loadProfile(){
     return;
   }
 
-  const { data,error } =
-  await supabase
-  .from("profiles")
-  .select("*")
-  .eq("id", user.id)
-  .single();
+ const { data,error } =
+await supabase
+.from("profiles")
+.select("*")
+.eq("id", user.id)
+.maybeSingle();
 
-  if(error){
-    console.error(error);
-    return;
-  }
+ if(error){
+  console.error(error);
+  return;
+}
+
+if(!data){
+
+  alert(
+    "Profile not found. Please contact support or register again."
+  );
+
+  return;
+}
 
   document.getElementById("coins").innerText =
   data.coins || 0;
