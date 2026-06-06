@@ -400,47 +400,50 @@ async function(){
   } =
   await supabase.auth.getUser();
 
-  const withdrawError =
-  await supabase
-  .from("withdrawals")
-  .insert({
+  const {
+  error: withdrawError
+} =
+await supabase
+.from("withdrawals")
+.insert({
 
-    email:user.email,
-    upi:upi,
-    amount:amount,
-    status:"Pending"
+  email:user.email,
+  upi:upi,
+  amount:amount,
+  status:"Pending"
 
-  });
+});
 
-  if(withdrawError.error){
+if(withdrawError){
 
-    alert(
-      "Withdraw request failed"
-    );
+  alert(
+    "Withdraw request failed"
+  );
 
-    return;
-  }
+  return;
+}
 
-  const balanceError =
-  await supabase
-  .from("profiles")
-  .update({
+  const {
+  error: balanceError
+} =
+await supabase
+.from("profiles")
+.update({
 
-    money:
-    Number(profile.money) -
-    amount
+  money:
+  Number(profile.money) - amount
 
-  })
-  .eq("id", profile.id);
+})
+.eq("id", profile.id);
 
-  if(balanceError.error){
+if(balanceError){
 
-    alert(
-      "Balance update failed"
-    );
+  alert(
+    "Balance update failed"
+  );
 
-    return;
-  }
+  return;
+}
 
   alert(
     "Withdrawal request submitted"
@@ -515,7 +518,7 @@ async function loadHistory(){
 
       <br><br>
 
-      📅 ${item.created_at}
+      📅 ${new Date(item.created_at).toLocaleString()}
 
     </div>
 
