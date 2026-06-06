@@ -105,7 +105,11 @@ Watch First
 </button>
 
 </div>
-
+  
+<button onclick="location.href='video-task.html'">
+⬅ Back
+</button>
+  
 <script type="module">
 
 import { supabase } from "./supabase.js";
@@ -264,13 +268,18 @@ return;
 }
 
 const {
-data: alreadyDone
+data: alreadyDone,
+error: alreadyDoneError
 } =
 await supabase
 .from("video_tasks")
 .select("*")
 .eq("user_id", user.id)
 .eq("task_number", currentTask);
+
+if(alreadyDoneError){
+throw alreadyDoneError;
+}
 
 if(
 alreadyDone &&
