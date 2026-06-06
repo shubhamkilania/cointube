@@ -108,7 +108,9 @@ Watch First
 
 </div>
 
-<script>
+<script type="module">
+
+import { supabase } from "./supabase.js";
 
 let time = 30;
 
@@ -120,122 +122,161 @@ document.getElementById("claimBtn");
 
 const currentTask =
 parseInt(
-localStorage.getItem("currentTask")
-);
-
-const completed =
-JSON.parse(
-localStorage.getItem("videoTasks")
-) || [];
-
-if(
-completed.includes(currentTask)
-){
-
-timer.innerHTML =
-"✅ Already Completed";
-
-claimBtn.disabled = true;
-
-claimBtn.innerHTML =
-"Completed";
-
-}
-
-else{
-
-const interval =
-setInterval(()=>{
-
-time--;
-
-timer.innerHTML =
-"⏳ " + time + " sec";
-
-if(time <= 0){
-
-clearInterval(interval);
-
-timer.innerHTML =
-"✅ Video Completed";
-
-claimBtn.disabled = false;
-
-claimBtn.innerHTML =
-"Claim Reward";
-
-}
-
-},1000);
-
-}
-
-claimBtn.onclick = ()=>{
-
-let completed =
-JSON.parse(
-localStorage.getItem("videoTasks")
-) || [];
-
-if(
-completed.includes(currentTask)
-){
-
-alert(
-"Task already completed"
-);
-
-return;
-
-}
-
-let coins =
-parseInt(
-localStorage.getItem("coins")
-) || 0;
-
-coins += 10;
-
-localStorage.setItem(
-"coins",
-coins
-);
-
-let videos =
-parseInt(
-localStorage.getItem(
-"videosWatched"
-)
-) || 0;
-
-videos++;
-
-localStorage.setItem(
-"videosWatched",
-videos
-);
-
-completed.push(
-currentTask
-);
-
-localStorage.setItem(
-"videoTasks",
-JSON.stringify(
-completed
+sessionStorage.getItem(
+"currentTask"
 )
 );
 
-alert(
-"🎉 +10 Coins Added"
-);
+async function checkTaskStatus(){
 
-location.href =
-"video-task.html";
+  const {
+    data:{ user }
+  } = await supabase.auth.getUser();
+
+  if(!user){
+    location.href = "login.html";
+    return;
+  }
+
+  const { data } =
+  await supabase
+  .from("video_tasks")
+  .select("*")
+  .eq("user_id", user.id)
+  .eq("task_number", currentTask);
+
+  if(data && data.length > 0){
+
+    timer.innerHTML =
+    "✅ Already Completed";
+
+    claimBtn.disabled = true;
+
+    claimBtn.innerHTML =
+    "Completed";
+
+    return;
+  }
+
+  startTimer();
+
+}
+
+function startTimer(){
+
+  const interval =
+  setInterval(()=>{
+
+    time--;
+
+    timer.innerHTML =
+    "⏳ " + time + " sec";
+
+    if(time <= 0){
+
+      clearInterval(interval);
+
+      timer.innerHTML =
+      "✅ Video Completed";
+
+      claimBtn.disabled =
+      false;
+
+      claimBtn.innerHTML =
+      "Claim Reward";
+
+    }
+
+  },1000);
+
+}
+
+claimBtn.onclick =
+async ()=>{
+
+  try{
+
+    const {
+      data:{ user }
+    } =
+    await supabase.auth.getUser();
+
+    const { data:alreadyDone } =
+    await supabase
+    .from("video_tasks")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("task_number", currentTask);
+
+    if(
+      alreadyDone &&
+      alreadyDone.length > 0
+    ){
+
+      alert(
+      "Task already completed"
+      );
+
+      return;
+
+    }
+
+    const { data:profile } =
+    await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+    await supabase
+    .from("profiles")
+    .update({
+
+      coins:
+      (profile.coins || 0) + 10,
+
+      videos_watched:
+      (profile.videos_watched || 0) + 1
+
+    })
+    .eq("id", user.id);
+
+    await supabase
+    .from("video_tasks")
+    .insert({
+
+      user_id:
+      user.id,
+
+      task_number:
+      currentTask
+
+    });
+
+    alert(
+    "🎉 +10 Coins Added"
+    );
+
+    location.href =
+    "video-task.html";
+
+  }catch(err){
+
+    console.error(err);
+
+    alert(
+    "Error: " +
+    err.message
+    );
+
+  }
 
 };
 
+checkTaskStatus();
+
 </script>
+
 
 <script type="module" src="auth-check.js"></script>
   
