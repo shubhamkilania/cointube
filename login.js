@@ -4,52 +4,94 @@ document
 .getElementById("loginBtn")
 .addEventListener("click", async () => {
 
-  const email =
-    document.getElementById("email")
-    .value.trim();
+const email =
+document.getElementById("email")
+.value.trim();
 
-  const password =
-    document.getElementById("password")
-    .value;
+const password =
+document.getElementById("password")
+.value;
 
-  const status =
-    document.getElementById("statusText");
+const status =
+document.getElementById("statusText");
 
-  if(!email || !password){
+if(!email || !password){
 
-    status.innerText =
-      "Enter email and password";
+```
+status.innerText =
+"Enter email and password";
 
-    return;
+return;
+```
 
-  }
+}
 
-  try{
+try{
 
-    status.innerText =
-      "Logging in...";
+```
+status.innerText =
+"Logging in...";
 
-    const { error } =
-    await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
+const {
+  data,
+  error
+} =
+await supabase.auth.signInWithPassword({
+  email,
+  password
+});
 
-    if(error) throw error;
+if(error) throw error;
 
-    status.innerText =
-      "Login successful";
+const user =
+data.user;
 
-    window.location.href =
-      "home.html";
+const {
+  data: profile,
+  error: profileError
+} =
+await supabase
+.from("profiles")
+.select("*")
+.eq("id", user.id)
+.maybeSingle();
 
-  }catch(err){
+if(profileError){
 
-    console.error(err);
+  console.error(profileError);
 
-    status.innerText =
-      err.message;
+}
 
-  }
+if(!profile){
+
+  status.innerText =
+  "Profile not found. Contact support.";
+
+  return;
+
+}
+
+status.innerText =
+"Login successful";
+
+setTimeout(()=>{
+
+  window.location.href =
+  "home.html";
+
+},500);
+```
+
+}catch(err){
+
+```
+console.error(err);
+
+status.innerText =
+err.message;
+```
+
+}
 
 });
+
