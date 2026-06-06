@@ -2,72 +2,91 @@ import { supabase } from "./supabase.js";
 
 function generateReferralCode(username){
 
-  const firstPart =
-    username
-    .replace(/[^a-zA-Z]/g,"")
-    .substring(0,4)
-    .toUpperCase();
+const firstPart =
+username
+.replace(/[^a-zA-Z]/g,"")
+.substring(0,4)
+.toUpperCase();
 
-  const randomPart =
-    Math.floor(
-      1000 + Math.random() * 9000
-    );
+const randomPart =
+Math.floor(
+1000 + Math.random() * 9000
+);
 
-  return firstPart + randomPart;
+return firstPart + randomPart;
 }
 
 document
 .getElementById("registerBtn")
 .addEventListener("click", async () => {
 
-  const username =
-    document.getElementById("username")
-    .value.trim();
+const username =
+document.getElementById("username")
+.value.trim();
 
-  const email =
-    document.getElementById("email")
-    .value.trim();
+const email =
+document.getElementById("email")
+.value.trim();
 
-  const password =
-    document.getElementById("password")
-    .value;
+const password =
+document.getElementById("password")
+.value;
 
-  const referredBy =
-    document.getElementById("referral")
-    .value.trim();
+const status =
+document.getElementById("statusText");
 
-  const status =
-    document.getElementById("statusText");
+if(!username || !email || !password){
 
-  if(!username || !email || !password){
-    status.innerText =
-      "Fill all required fields";
-    return;
-  }
+```
+status.innerText =
+"Fill all required fields";
 
-  try{
+return;
+```
 
-    status.innerText =
-      "Creating account...";
+}
 
-    const { data, error } =
-    await supabase.auth.signUp({
-      email,
-      password
-    });
+try{
 
-    if(error) throw error;
+```
+status.innerText =
+"Creating account...";
 
-  const referralCode =
-  generateReferralCode(username);
+const {
+  data,
+  error
+} =
+await supabase.auth.signUp({
+  email,
+  password
+});
 
+if(error) throw error;
+
+if(!data.user){
+
+  status.innerText =
+  "Check your email and verify your account.";
+
+  return;
+
+}
+
+const referralCode =
+generateReferralCode(username);
+
+const {
+  error: profileError
+} =
 await supabase
 .from("profiles")
 .insert({
 
-  id: data.user.id,
+  id:
+  data.user.id,
 
-  username: username,
+  username:
+  username,
 
   coins: 0,
 
@@ -77,20 +96,35 @@ await supabase
 
   referrals: 0,
 
-  referral_code: referralCode
+  referral_code:
+  referralCode
 
 });
 
-    status.innerText =
-      "Account created. Check your email for verification.";
+if(profileError)
+throw profileError;
 
-  }catch(err){
+status.innerText =
+"Account created successfully.";
 
-    console.error(err);
+setTimeout(()=>{
 
-    status.innerText =
-      err.message;
+  window.location.href =
+  "login.html";
 
-  }
+},1500);
+```
+
+}catch(err){
+
+```
+console.error(err);
+
+status.innerText =
+err.message;
+```
+
+}
 
 });
+
