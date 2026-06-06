@@ -74,6 +74,35 @@ if(!data.user){
 
 const referralCode =
 generateReferralCode(username);
+let inviter = null;
+
+if(referredBy){
+
+  const { data: inviterProfile } =
+  await supabase
+  .from("profiles")
+  .select("*")
+  .eq("referral_code", referredBy)
+  .maybeSingle();
+
+  if(inviterProfile){
+
+    inviter = inviterProfile;
+
+    await supabase
+    .from("profiles")
+    .update({
+      coins:
+      (inviterProfile.coins || 0) + 100,
+
+      referrals:
+      (inviterProfile.referrals || 0) + 1
+    })
+    .eq("id", inviterProfile.id);
+
+  }
+
+}
 
 const {
   error: profileError
