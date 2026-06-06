@@ -359,52 +359,45 @@ async function loadProfile(){
     return;
   }
 
-const { data: profile, error } =
-await supabase
-.from("profiles")
-.select("*")
-.eq("id", user.id)
-.maybeSingle();
-  
- if(error){
-  console.error(error);
-  return;
-}
+  const { data: profile, error } =
+  await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", user.id)
+  .maybeSingle();
 
-if(!data){
+  if(error){
+    console.error(error);
+    return;
+  }
 
-  alert(
-    "Profile not found. Please contact support or register again."
-  );
+  if(!profile){
 
-  return;
-}
+    alert(
+      "Profile not found. Please contact support or register again."
+    );
+
+    return;
+  }
 
   document.getElementById("coins").innerText =
-  data.coins || 0;
+  profile.coins || 0;
 
   document.getElementById("statCoins").innerText =
-  data.coins || 0;
+  profile.coins || 0;
 
-  const usernameEl =
-  document.getElementById("username");
+  document.getElementById("taskCount").innerText =
+  profile.videos_watched || 0;
 
-  if(usernameEl){
-    usernameEl.innerText =
-    data.username;
-  }
+  document.getElementById("refCount").innerText =
+  profile.referrals || 0;
 
 }
 
 loadProfile();
-document.getElementById("taskCount").innerText =
-(profile.videos_watched || 0);
-  
-document.getElementById("refCount").innerText =
-(profile.referrals || 0);
-  
+
 </script>
-  
+
 <script type="module" src="auth-check.js"></script>
   
 </body>
