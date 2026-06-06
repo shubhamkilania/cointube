@@ -124,6 +124,15 @@ const currentTask =
 parseInt(
 sessionStorage.getItem(
 "currentTask"
+  if(
+  !currentTask ||
+  currentTask < 1 ||
+  currentTask > 3
+){
+  location.href =
+  "video-task.html";
+  return;
+}
 )
 );
 
@@ -138,26 +147,29 @@ async function checkTaskStatus(){
     return;
   }
 
-  const { data } =
-  await supabase
-  .from("video_tasks")
-  .select("*")
-  .eq("user_id", user.id)
-  .eq("task_number", currentTask);
+ const { data: allTasks } =
+await supabase
+.from("video_tasks")
+.select("task_number")
+.eq("user_id", user.id);
 
-  if(data && data.length > 0){
+const completed =
+allTasks
+? allTasks.map(t => t.task_number)
+: [];
 
-    timer.innerHTML =
-    "✅ Already Completed";
+if(currentTask === 2 && !completed.includes(1)){
+  alert("Complete Task 1 first");
+  location.href = "video-task.html";
+  return;
+}
 
-    claimBtn.disabled = true;
-
-    claimBtn.innerHTML =
-    "Completed";
-
-    return;
-  }
-
+if(currentTask === 3 && !completed.includes(2)){
+  alert("Complete Task 2 first");
+  location.href = "video-task.html";
+  return;
+}
+  
   startTimer();
 
 }
@@ -184,7 +196,16 @@ function startTimer(){
 
       claimBtn.innerHTML =
       "Claim Reward";
-
+      
+  let canClaim = false;
+      if(time <= 0){
+        canClaim = true;
+        if(!canClaim){
+  alert(
+    "Watch the full video first"
+  );
+  return;
+}
     }
 
   },1000);
@@ -221,37 +242,35 @@ async ()=>{
 
     }
 
-    const { data:profile } =
-    await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+   const {
+  error:updateError
+} = await supabase
+.from("profiles")
+.update({
+  coins:
+  (profile.coins || 0) + 10,
 
-    await supabase
-    .from("profiles")
-    .update({
+  videos_watched:
+  (profile.videos_watched || 0) + 1
+})
+.eq("id", user.id);
 
-      coins:
-      (profile.coins || 0) + 10,
+if(updateError){
+  throw updateError;
+}
 
-      videos_watched:
-      (profile.videos_watched || 0) + 1
+   const {
+  error:taskError
+} = await supabase
+.from("video_tasks")
+.insert({
+  user_id:user.id,
+  task_number:currentTask
+});
 
-    })
-    .eq("id", user.id);
-
-    await supabase
-    .from("video_tasks")
-    .insert({
-
-      user_id:
-      user.id,
-
-      task_number:
-      currentTask
-
-    });
+if(taskError){
+  throw taskError;
+}
 
     alert(
     "🎉 +10 Coins Added"
