@@ -190,12 +190,12 @@ with the upcoming referral system.
 
 <h2>Your Referral Code</h2>
 
-<div class="code">
-COMING SOON
+<div class="code" id="refCode">
+Loading...
 </div>
 
-<button>
-Generate Code
+<button id="copyBtn">
+Copy Code
 </button>
 
 </div>
@@ -226,7 +226,58 @@ onclick="location.href='home.html'">
 </button>
 
 </div>
+  
+<script type="module">
 
+import { supabase } from "./supabase.js";
+
+async function loadReferral(){
+
+  const {
+    data:{ user }
+  } = await supabase.auth.getUser();
+
+  if(!user){
+    location.href = "login.html";
+    return;
+  }
+
+  const { data: profile } =
+  await supabase
+  .from("profiles")
+  .select("referral_code,referrals")
+  .eq("id", user.id)
+  .single();
+
+  document.getElementById(
+    "refCode"
+  ).innerText =
+  profile.referral_code;
+
+}
+
+document
+.getElementById("copyBtn")
+.addEventListener("click",()=>{
+
+  const code =
+  document.getElementById(
+    "refCode"
+  ).innerText;
+
+  navigator.clipboard.writeText(
+    code
+  );
+
+  alert(
+    "Referral code copied!"
+  );
+
+});
+
+loadReferral();
+
+</script>
 </body>
 </html>
 
