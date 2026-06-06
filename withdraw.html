@@ -252,190 +252,279 @@ onclick="location.href='home.html'">
 
 </div>
 
-<script>
+<script type="module">
 
-let coins =
-parseInt(localStorage.getItem("coins")) || 0;
+import { supabase } from "./supabase.js";
 
-let money =
-parseFloat(localStorage.getItem("money")) || 0;
+let profile = null;
 
-updateBalances();
-loadHistory();
+async function loadProfile(){
 
-function updateBalances(){
+  const {
+    data:{ user }
+  } = await supabase.auth.getUser();
 
-document.getElementById(
-"coinBalance"
-).innerText = coins;
+  if(!user){
+    location.href = "login.html";
+    return;
+  }
 
-document.getElementById(
-"moneyBalance"
-).innerText = "₹" + money.toFixed(2);
+  const { data } =
+  await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", user.id)
+  .single();
+
+  profile = data;
+
+  document.getElementById(
+    "coinBalance"
+  ).innerText =
+  profile.coins || 0;
+
+  document.getElementById(
+    "moneyBalance"
+  ).innerText =
+  "₹" +
+  Number(
+    profile.money || 0
+  ).toFixed(2);
+
+  loadHistory();
+}
+
+window.convertCoins =
+async function(){
+
+  if(profile.coins < 100){
+
+    alert(
+      "Need at least 100 coins"
+    );
+
+    return;
+  }
+
+  const converted =
+  Math.floor(
+    profile.coins / 100
+  );
+
+  const newCoins =
+  profile.coins -
+  (converted * 100);
+
+  const newMoney =
+  Number(
+    profile.money || 0
+  ) + converted;
+
+  const { error } =
+  await supabase
+  .from("profiles")
+  .update({
+
+    coins:newCoins,
+    money:newMoney
+
+  })
+  .eq("id", profile.id);
+
+  if(error){
+
+    alert(
+      "Conversion failed"
+    );
+
+    return;
+  }
+
+  alert(
+    "Converted ₹" +
+    converted
+  );
+
+  loadProfile();
+};
+
+window.withdrawMoney =
+async function(){
+
+  const upi =
+  document
+  .getElementById("upi")
+  .value
+  .trim();
+
+  const amount =
+  parseFloat(
+    document
+    .getElementById("amount")
+    .value
+  );
+
+  if(!upi){
+
+    alert(
+      "Enter UPI ID"
+    );
+
+    return;
+  }
+
+  if(
+    !amount ||
+    amount <= 0
+  ){
+
+    alert(
+      "Enter valid amount"
+    );
+
+    return;
+  }
+
+  if(amount > profile.money){
+
+    alert(
+      "Insufficient balance"
+    );
+
+    return;
+  }
+
+  const {
+    data:{ user }
+  } =
+  await supabase.auth.getUser();
+
+  const withdrawError =
+  await supabase
+  .from("withdrawals")
+  .insert({
+
+    email:user.email,
+    upi:upi,
+    amount:amount,
+    status:"Pending"
+
+  });
+
+  if(withdrawError.error){
+
+    alert(
+      "Withdraw request failed"
+    );
+
+    return;
+  }
+
+  const balanceError =
+  await supabase
+  .from("profiles")
+  .update({
+
+    money:
+    Number(profile.money) -
+    amount
+
+  })
+  .eq("id", profile.id);
+
+  if(balanceError.error){
+
+    alert(
+      "Balance update failed"
+    );
+
+    return;
+  }
+
+  alert(
+    "Withdrawal request submitted"
+  );
+
+  document.getElementById(
+    "upi"
+  ).value = "";
+
+  document.getElementById(
+    "amount"
+  ).value = "";
+
+  loadProfile();
+};
+
+async function loadHistory(){
+
+  const {
+    data:{ user }
+  } =
+  await supabase.auth.getUser();
+
+  const { data } =
+  await supabase
+  .from("withdrawals")
+  .select("*")
+  .eq(
+    "email",
+    user.email
+  )
+  .order(
+    "id",
+    {
+      ascending:false
+    }
+  );
+
+  const history =
+  document.getElementById(
+    "history"
+  );
+
+  if(
+    !data ||
+    data.length === 0
+  ){
+
+    history.innerHTML =
+    '<div class="empty">No withdrawal requests yet.</div>';
+
+    return;
+  }
+
+  history.innerHTML = "";
+
+  data.forEach(item=>{
+
+    history.innerHTML += `
+
+    <div class="history-item">
+
+      <div class="status">
+      🟡 ${item.status}
+      </div>
+
+      💸 ₹${item.amount}
+
+      <br><br>
+
+      📱 ${item.upi}
+
+      <br><br>
+
+      📅 ${item.created_at}
+
+    </div>
+
+    `;
+
+  });
 
 }
 
-function convertCoins(){
-
-if(coins < 100){
-
-alert(
-"Need at least 100 coins"
-);
-
-return;
-}
-
-const converted =
-Math.floor(coins / 100);
-
-coins =
-coins - (converted * 100);
-
-money =
-money + converted;
-
-localStorage.setItem(
-"coins",
-coins
-);
-
-localStorage.setItem(
-"money",
-money
-);
-
-updateBalances();
-
-alert(
-"Converted ₹" + converted
-);
-
-}
-
-function withdrawMoney(){
-
-const upi =
-document.getElementById("upi")
-.value.trim();
-
-const amount =
-parseFloat(
-document.getElementById("amount").value
-);
-
-if(!upi){
-
-alert("Enter UPI ID");
-return;
-
-}
-
-if(!amount || amount <= 0){
-
-alert("Enter valid amount");
-return;
-
-}
-
-if(amount > money){
-
-alert("Not enough money balance");
-return;
-
-}
-
-money -= amount;
-
-localStorage.setItem(
-"money",
-money
-);
-
-updateBalances();
-
-let history =
-JSON.parse(
-localStorage.getItem(
-"withdrawHistory"
-)
-) || [];
-
-history.push({
-
-upi: upi,
-amount: amount,
-status: "Pending",
-date: new Date().toLocaleString()
-
-});
-
-localStorage.setItem(
-"withdrawHistory",
-JSON.stringify(history)
-);
-
-document.getElementById("upi").value = "";
-document.getElementById("amount").value = "";
-
-alert(
-"Withdrawal Request Submitted"
-);
-
-loadHistory();
-
-}
-
-function loadHistory(){
-
-const historyDiv =
-document.getElementById("history");
-
-let history =
-JSON.parse(
-localStorage.getItem(
-"withdrawHistory"
-)
-) || [];
-
-if(history.length === 0){
-
-historyDiv.innerHTML =
-'<div class="empty">No withdrawal requests yet.</div>';
-
-return;
-
-}
-
-historyDiv.innerHTML = "";
-
-history.slice().reverse().forEach(item=>{
-
-historyDiv.innerHTML += `
-
-<div class="history-item">
-
-<div class="status">
-🟡 ${item.status}
-</div>
-
-💸 ₹${item.amount}
-
-<br><br>
-
-📱 ${item.upi}
-
-<br><br>
-
-📅 ${item.date}
-
-</div>
-
-`;
-
-});
-
-}
+loadProfile();
 
 </script>
 
