@@ -82,11 +82,6 @@ margin-top:10px;
 
 <div class="logo">CoinTube</div>
 
-<button class="back"
-onclick="location.href='home.html'">
-🏠 Back Home
-</button>
-
 <div class="card">
 <h2 style="color:#ffd700;">🎯 Video Progress</h2>
 <div id="progress" class="progress">
@@ -153,6 +148,11 @@ Start Task
 </button>
 
 </div>
+  
+  <button class="back"
+onclick="location.href='home.html'">
+🏠 Back Home
+</button>
 
 <script type="module">
 
@@ -169,11 +169,16 @@ async function loadTasks(){
     return;
   }
 
-  const { data:tasks } =
-  await supabase
-  .from("video_tasks")
-  .select("task_number")
-  .eq("user_id", user.id);
+  const { data: tasks, error } =
+await supabase
+.from("video_tasks")
+.select("task_number")
+.eq("user_id", user.id);
+
+if(error){
+  console.error(error);
+  return;
+}
 
   const completed =
   tasks
@@ -210,9 +215,9 @@ async function loadTasks(){
     !completed.includes(1)
   ){
 
-    task1.disabled = false;
-    status1.innerHTML =
-    "🟢 Available";
+    document.getElementById("task1").disabled = false;
+document.getElementById("status1").innerHTML =
+"🟢 Available";
 
   }
 
@@ -222,10 +227,9 @@ async function loadTasks(){
     !completed.includes(2)
   ){
 
-    task2.disabled = false;
-
-    status2.innerHTML =
-    "🟢 Available";
+    document.getElementById("task2").disabled = false;
+document.getElementById("status2").innerHTML =
+"🟢 Available";
 
   }
 
@@ -235,11 +239,9 @@ async function loadTasks(){
     !completed.includes(3)
   ){
 
-    task3.disabled = false;
-
-    status3.innerHTML =
-    "🟢 Available";
-
+    document.getElementById("task3").disabled = false;
+document.getElementById("status3").innerHTML =
+"🟢 Available";
   }
 
   document.getElementById(
