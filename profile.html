@@ -323,22 +323,22 @@ async function loadProfile(){
     document.getElementById(
       "coins"
     ).innerText =
-    profile.coins || 0;
+    profile.money ?? 0;
 
     document.getElementById(
       "money"
     ).innerText =
-    profile.money || 0;
+    profile.money ?? 0;
 
     document.getElementById(
       "videos"
     ).innerText =
-    profile.videos_watched || 0;
+    profile.videos_watched ?? 0;
 
     document.getElementById(
       "referrals"
     ).innerText =
-    profile.referrals || 0;
+    profile.referrals ?? 0;
 
   }catch(err){
 
