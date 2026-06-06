@@ -17,18 +17,15 @@ document.getElementById("statusText");
 
 if(!email || !password){
 
-```
 status.innerText =
 "Enter email and password";
 
 return;
-```
 
 }
 
 try{
 
-```
 status.innerText =
 "Logging in...";
 
@@ -80,16 +77,13 @@ setTimeout(()=>{
   "home.html";
 
 },500);
-```
 
 }catch(err){
-
-```
+  
 console.error(err);
 
 status.innerText =
 err.message;
-```
 
 }
 
