@@ -197,7 +197,7 @@ id="amount"
 type="number"
 placeholder="Enter Amount in ₹"
 >
-
+ 
 <button onclick="withdrawMoney()">
 Request Withdraw
 </button>
@@ -378,13 +378,14 @@ async function(){
     amount <= 0
   ){
 
-    alert(
-      "Enter valid amount"
-    );
+   if(amount < 10){
 
-    return;
-  }
+  alert(
+    "Minimum withdrawal is ₹10"
+  );
 
+  return;
+}
   if(amount > profile.money){
 
     alert(
