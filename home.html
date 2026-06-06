@@ -266,12 +266,12 @@ Keep earning to unlock withdrawals.
 
 <div class="stat-card">
 <h3>✅ Tasks Done</h3>
-<h2>0</h2>
+<h2 id="taskCount">0</h2>
 </div>
 
 <div class="stat-card">
 <h3>👥 Referrals</h3>
-<h2>0</h2>
+<h2 id="refCount">0</h2>
 </div>
 
 </div>
@@ -359,13 +359,13 @@ async function loadProfile(){
     return;
   }
 
- const { data,error } =
+const { data: profile, error } =
 await supabase
 .from("profiles")
 .select("*")
 .eq("id", user.id)
 .maybeSingle();
-
+  
  if(error){
   console.error(error);
   return;
@@ -397,7 +397,12 @@ if(!data){
 }
 
 loadProfile();
-
+document.getElementById("taskCount").innerText =
+(profile.videos_watched || 0);
+  
+document.getElementById("refCount").innerText =
+(profile.referrals || 0);
+  
 </script>
   
 <script type="module" src="auth-check.js"></script>
