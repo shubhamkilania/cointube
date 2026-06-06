@@ -154,171 +154,121 @@ Start Task
 
 </div>
 
-<script>
+<script type="module">
 
-const RESET_TIME =
-12 * 60 * 60 * 1000;
+import { supabase } from "./supabase.js";
 
-let taskData =
-JSON.parse(
-localStorage.getItem("videoTaskData")
-) || {
-completed: [],
-lastReset: Date.now()
+async function loadTasks(){
+
+  const {
+    data:{ user }
+  } = await supabase.auth.getUser();
+
+  if(!user){
+    location.href = "login.html";
+    return;
+  }
+
+  const { data:tasks } =
+  await supabase
+  .from("video_tasks")
+  .select("task_number")
+  .eq("user_id", user.id);
+
+  const completed =
+  tasks
+  ? tasks.map(t => t.task_number)
+  : [];
+
+  for(let i=1;i<=3;i++){
+
+    const btn =
+    document.getElementById(
+      "task"+i
+    );
+
+    const status =
+    document.getElementById(
+      "status"+i
+    );
+
+    if(completed.includes(i)){
+
+      status.innerHTML =
+      "✅ Completed";
+
+      btn.disabled = true;
+
+      btn.innerText =
+      "Completed";
+
+    }
+
+  }
+
+  if(
+    !completed.includes(1)
+  ){
+
+    task1.disabled = false;
+    status1.innerHTML =
+    "🟢 Available";
+
+  }
+
+  if(
+    completed.includes(1)
+    &&
+    !completed.includes(2)
+  ){
+
+    task2.disabled = false;
+
+    status2.innerHTML =
+    "🟢 Available";
+
+  }
+
+  if(
+    completed.includes(2)
+    &&
+    !completed.includes(3)
+  ){
+
+    task3.disabled = false;
+
+    status3.innerHTML =
+    "🟢 Available";
+
+  }
+
+  document.getElementById(
+    "progress"
+  ).innerHTML =
+  "🎯 Completed "
+  +
+  completed.length
+  +
+  "/3 Tasks";
+
+}
+
+window.openTask = function(task){
+
+  sessionStorage.setItem(
+    "currentTask",
+    task
+  );
+
+  location.href =
+  "watch-video.html";
+
 };
-
-function resetTasksIfNeeded(){
-
-const now = Date.now();
-
-if(
-now - taskData.lastReset >
-RESET_TIME
-){
-
-taskData = {
-completed: [],
-lastReset: now
-};
-
-localStorage.setItem(
-"videoTaskData",
-JSON.stringify(taskData)
-);
-
-}
-
-}
-
-function loadTasks(){
-
-resetTasksIfNeeded();
-
-const completed =
-taskData.completed;
-
-for(let i=1;i<=3;i++){
-
-const btn =
-document.getElementById(
-"task"+i
-);
-
-const status =
-document.getElementById(
-"status"+i
-);
-
-if(completed.includes(i)){
-
-status.innerHTML =
-"✅ Completed";
-
-btn.disabled = true;
-
-btn.innerText =
-"Completed";
-
-}
-
-}
-
-if(
-completed.includes(1) &&
-!completed.includes(2)
-){
-
-task2.disabled = false;
-status2.innerHTML =
-"🟢 Available";
-
-}
-
-if(
-completed.includes(2) &&
-!completed.includes(3)
-){
-
-task3.disabled = false;
-status3.innerHTML =
-"🟢 Available";
-
-}
-
-if(completed.length === 3){
-
-let remaining =
-RESET_TIME -
-(
-Date.now() -
-taskData.lastReset
-);
-
-let hours =
-Math.floor(
-remaining /
-(1000*60*60)
-);
-
-document.getElementById(
-"progress"
-).innerHTML =
-"⏳ All tasks completed. New tasks in "
-+ hours +
-" hours";
-
-}else{
-
-document.getElementById(
-"progress"
-).innerHTML =
-"🎯 Completed "
-+
-completed.length
-+
-"/3 Tasks";
-
-}
-
-}
-
-function openTask(task){
-
-const {
-data:{user}
-} = await supabase.auth.getUser();
-
-const { data:profile } =
-await supabase
-.from("profiles")
-.select("*")
-.eq("id",user.id)
-.single();
-
-await supabase
-.from("profiles")
-.update({
-
-coins:
-profile.coins + 10,
-
-videos_watched:
-profile.videos_watched + 1
-
-})
-.eq("id",user.id);
-"currentTask",
-task
-);
-
-location.href =
-"watch-video.html";
-
-}
 
 loadTasks();
 
 </script>
+
 
 <script type="module" src="auth-check.js"></script>
  
