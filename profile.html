@@ -267,53 +267,86 @@ import { supabase } from "./supabase.js";
 
 async function loadProfile(){
 
-const {
-data:{user}
-} = await supabase.auth.getUser();
+  const {
+    data:{user}
+  } = await supabase.auth.getUser();
 
-if(!user){
-location.href = "login.html";
-return;
-}
+  if(!user){
 
-const username =
-user.user_metadata?.username ||
-user.email.split("@")[0];
+    location.href =
+    "login.html";
 
-document.getElementById("username").innerText =
-username;
+    return;
 
-document.getElementById("email").innerText =
-user.email;
+  }
 
-document.getElementById("avatar").innerText =
-username.charAt(0).toUpperCase();
+  const {
+    data: profile,
+    error
+  } = await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", user.id)
+  .maybeSingle();
 
-document.getElementById("coins").innerText =
-localStorage.getItem("coins") || 0;
+  if(error){
 
-document.getElementById("money").innerText =
-localStorage.getItem("money") || 0;
+    console.error(error);
+    return;
 
-document.getElementById("videos").innerText =
-localStorage.getItem("videosWatched") || 0;
+  }
 
-document.getElementById("referrals").innerText =
-localStorage.getItem("referrals") || 0;
+  if(!profile){
+
+    alert(
+      "Profile not found."
+    );
+
+    location.href =
+    "login.html";
+
+    return;
+
+  }
+
+  document.getElementById("username").innerText =
+  profile.username || "User";
+
+  document.getElementById("email").innerText =
+  user.email;
+
+  document.getElementById("avatar").innerText =
+  (profile.username || "U")
+  .charAt(0)
+  .toUpperCase();
+
+  document.getElementById("coins").innerText =
+  profile.coins || 0;
+
+  document.getElementById("money").innerText =
+  profile.money || 0;
+
+  document.getElementById("videos").innerText =
+  profile.videos_watched || 0;
+
+  document.getElementById("referrals").innerText =
+  profile.referrals || 0;
 
 }
 
 window.logout = async function(){
 
-await supabase.auth.signOut();
+  await supabase.auth.signOut();
 
-location.href = "login.html";
+  location.href =
+  "login.html";
 
-}
+};
 
 loadProfile();
 
 </script>
+
 
 <script type="module" src="auth-check.js"></script>
 
