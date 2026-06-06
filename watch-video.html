@@ -108,11 +108,13 @@ Watch First
 
 </div>
 
-<script type="module">
+Replace your entire `<script type="module">...</script>` block with this:
 
+```js
 import { supabase } from "./supabase.js";
 
 let time = 30;
+let canClaim = false;
 
 const timer =
 document.getElementById("timer");
@@ -122,19 +124,18 @@ document.getElementById("claimBtn");
 
 const currentTask =
 parseInt(
-sessionStorage.getItem(
-"currentTask"
-  if(
+  sessionStorage.getItem("currentTask")
+);
+
+if(
   !currentTask ||
   currentTask < 1 ||
   currentTask > 3
 ){
   location.href =
   "video-task.html";
-  return;
+  throw new Error("Invalid task");
 }
-)
-);
 
 async function checkTaskStatus(){
 
@@ -147,29 +148,71 @@ async function checkTaskStatus(){
     return;
   }
 
- const { data: allTasks } =
-await supabase
-.from("video_tasks")
-.select("task_number")
-.eq("user_id", user.id);
+  const { data: allTasks, error } =
+  await supabase
+  .from("video_tasks")
+  .select("task_number")
+  .eq("user_id", user.id);
 
-const completed =
-allTasks
-? allTasks.map(t => t.task_number)
-: [];
+  if(error){
+    console.error(error);
+    return;
+  }
 
-if(currentTask === 2 && !completed.includes(1)){
-  alert("Complete Task 1 first");
-  location.href = "video-task.html";
-  return;
-}
+  const completed =
+  allTasks
+  ? allTasks.map(
+      t => t.task_number
+    )
+  : [];
 
-if(currentTask === 3 && !completed.includes(2)){
-  alert("Complete Task 2 first");
-  location.href = "video-task.html";
-  return;
-}
-  
+  if(
+    currentTask === 2 &&
+    !completed.includes(1)
+  ){
+    alert(
+      "Complete Task 1 first"
+    );
+
+    location.href =
+    "video-task.html";
+
+    return;
+  }
+
+  if(
+    currentTask === 3 &&
+    !completed.includes(2)
+  ){
+    alert(
+      "Complete Task 2 first"
+    );
+
+    location.href =
+    "video-task.html";
+
+    return;
+  }
+
+  if(
+    completed.includes(
+      currentTask
+    )
+  ){
+
+    timer.innerHTML =
+    "✅ Already Completed";
+
+    claimBtn.disabled =
+    true;
+
+    claimBtn.innerHTML =
+    "Completed";
+
+    return;
+
+  }
+
   startTimer();
 
 }
@@ -182,11 +225,17 @@ function startTimer(){
     time--;
 
     timer.innerHTML =
-    "⏳ " + time + " sec";
+    "⏳ " +
+    time +
+    " sec";
 
     if(time <= 0){
 
-      clearInterval(interval);
+      clearInterval(
+        interval
+      );
+
+      canClaim = true;
 
       timer.innerHTML =
       "✅ Video Completed";
@@ -196,16 +245,7 @@ function startTimer(){
 
       claimBtn.innerHTML =
       "Claim Reward";
-      
-  let canClaim = false;
-      if(time <= 0){
-        canClaim = true;
-        if(!canClaim){
-  alert(
-    "Watch the full video first"
-  );
-  return;
-}
+
     }
 
   },1000);
@@ -215,19 +255,48 @@ function startTimer(){
 claimBtn.onclick =
 async ()=>{
 
+  if(!canClaim){
+
+    alert(
+      "Watch the full video first"
+    );
+
+    return;
+
+  }
+
   try{
 
     const {
       data:{ user }
     } =
-    await supabase.auth.getUser();
+    await supabase
+    .auth
+    .getUser();
 
-    const { data:alreadyDone } =
+    if(!user){
+
+      location.href =
+      "login.html";
+
+      return;
+
+    }
+
+    const {
+      data: alreadyDone
+    } =
     await supabase
     .from("video_tasks")
     .select("*")
-    .eq("user_id", user.id)
-    .eq("task_number", currentTask);
+    .eq(
+      "user_id",
+      user.id
+    )
+    .eq(
+      "task_number",
+      currentTask
+    );
 
     if(
       alreadyDone &&
@@ -235,45 +304,84 @@ async ()=>{
     ){
 
       alert(
-      "Task already completed"
+        "Task already completed"
       );
 
       return;
 
     }
 
-   const {
-  error:updateError
-} = await supabase
-.from("profiles")
-.update({
-  coins:
-  (profile.coins || 0) + 10,
+    const {
+      data: profile,
+      error: profileError
+    } =
+    await supabase
+    .from("profiles")
+    .select("*")
+    .eq(
+      "id",
+      user.id
+    )
+    .single();
 
-  videos_watched:
-  (profile.videos_watched || 0) + 1
-})
-.eq("id", user.id);
+    if(profileError){
 
-if(updateError){
-  throw updateError;
-}
+      throw profileError;
 
-   const {
-  error:taskError
-} = await supabase
-.from("video_tasks")
-.insert({
-  user_id:user.id,
-  task_number:currentTask
-});
+    }
 
-if(taskError){
-  throw taskError;
-}
+    const {
+      error:updateError
+    } =
+    await supabase
+    .from("profiles")
+    .update({
+
+      coins:
+      (
+        profile.coins || 0
+      ) + 10,
+
+      videos_watched:
+      (
+        profile.videos_watched || 0
+      ) + 1
+
+    })
+    .eq(
+      "id",
+      user.id
+    );
+
+    if(updateError){
+
+      throw updateError;
+
+    }
+
+    const {
+      error:taskError
+    } =
+    await supabase
+    .from("video_tasks")
+    .insert({
+
+      user_id:
+      user.id,
+
+      task_number:
+      currentTask
+
+    });
+
+    if(taskError){
+
+      throw taskError;
+
+    }
 
     alert(
-    "🎉 +10 Coins Added"
+      "🎉 +10 Coins Added"
     );
 
     location.href =
@@ -284,8 +392,7 @@ if(taskError){
     console.error(err);
 
     alert(
-    "Error: " +
-    err.message
+      err.message
     );
 
   }
@@ -293,8 +400,8 @@ if(taskError){
 };
 
 checkTaskStatus();
+```
 
-</script>
 
 
 <script type="module" src="auth-check.js"></script>
