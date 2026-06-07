@@ -6,7 +6,7 @@ new URLSearchParams(
 window.location.search
 );
 
-const referredBy =
+let referredBy =
 urlParams.get("ref") ||
 "SHUB1411";
 
@@ -84,8 +84,6 @@ generateReferralCode(username);
 
 let inviter = null;
 
-if(referredBy){
-
 const {
 data: inviterProfile
 } =
@@ -98,27 +96,48 @@ referredBy
 )
 .maybeSingle();
 
-if(inviterProfile){
+if(!inviterProfile){
+
+referredBy =
+"SHUB1411";
+
+const {
+data: defaultProfile
+} =
+await supabase
+.from("profiles")
+.select("*")
+.eq(
+"referral_code",
+"SHUB1411"
+)
+.maybeSingle();
+
+inviter = defaultProfile;
+
+}else{
 
 inviter = inviterProfile;
+
+}
+
+if(inviter){
 
 await supabase
 .from("profiles")
 .update({
 
 coins:
-(inviterProfile.coins || 0) + 100,
+(inviter.coins || 0) + 100,
 
 referrals:
-(inviterProfile.referrals || 0) + 1
+(inviter.referrals || 0) + 1
 
 })
 .eq(
 "id",
-inviterProfile.id
+inviter.id
 );
-
-}
 
 }
 
