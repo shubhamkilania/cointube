@@ -239,133 +239,113 @@ import { supabase } from "./supabase.js";
 
 async function loadLeaderboard(){
 
-const {
-data: users,
-error
-} = await supabase
-.from("users")
-.select("*")
-.order("coins",{
-ascending:false
-});
+  const {
+    data: users,
+    error
+  } = await supabase
+  .from("profiles")
+  .select("*")
+  .order("coins", {
+    ascending: false
+  });
 
-if(error){
+  if(error){
 
-console.error(error);
-return;
+    console.error(error);
 
-}
+    document.getElementById(
+      "leaderboard"
+    ).innerHTML =
+    "<div class='loading'>Failed to load leaderboard.</div>";
 
-if(!users || users.length === 0){
+    return;
+  }
 
-document.getElementById(
-"leaderboard"
-).innerHTML =
-"<div class='loading'>No users found.</div>";
+  if(!users || users.length === 0){
 
-return;
+    document.getElementById(
+      "leaderboard"
+    ).innerHTML =
+    "<div class='loading'>No users found.</div>";
 
-}
+    return;
+  }
 
-if(users[0]){
+  document.getElementById("firstName").innerText =
+  users[0]?.username || "User";
 
-document.getElementById(
-"firstName"
-).innerText =
-users[0].username;
+  document.getElementById("firstCoins").innerText =
+  (users[0]?.coins || 0) + " Coins";
 
-document.getElementById(
-"firstCoins"
-).innerText =
-users[0].coins + " Coins";
+  document.getElementById("secondName").innerText =
+  users[1]?.username || "User";
 
-}
+  document.getElementById("secondCoins").innerText =
+  (users[1]?.coins || 0) + " Coins";
 
-if(users[1]){
+  document.getElementById("thirdName").innerText =
+  users[2]?.username || "User";
 
-document.getElementById(
-"secondName"
-).innerText =
-users[1].username;
+  document.getElementById("thirdCoins").innerText =
+  (users[2]?.coins || 0) + " Coins";
 
-document.getElementById(
-"secondCoins"
-).innerText =
-users[1].coins + " Coins";
+  let html = "";
 
-}
+  users.forEach((user,index)=>{
 
-if(users[2]){
+    html += `
 
-document.getElementById(
-"thirdName"
-).innerText =
-users[2].username;
+    <div class="row">
 
-document.getElementById(
-"thirdCoins"
-).innerText =
-users[2].coins + " Coins";
+      <span class="rank">
+      #${index + 1}
+      </span>
 
-}
+      <span>
+      ${user.username || "User"}
+      </span>
 
-let html = "";
+      <span>
+      ${user.coins || 0}
+      </span>
 
-users.forEach((user,index)=>{
+    </div>
 
-html += `
+    `;
 
-<div class="row">
+  });
 
-<span class="rank">
-#${index + 1}
-</span>
+  document.getElementById(
+    "leaderboard"
+  ).innerHTML = html;
 
-<span>
-${user.username}
-</span>
+  const {
+    data:{ user }
+  } = await supabase.auth.getUser();
 
-<span>
-${user.coins}
-</span>
+  if(user){
 
-</div>
+    const myIndex =
+    users.findIndex(
+      u => u.id === user.id
+    );
 
-`;
+    if(myIndex !== -1){
 
-});
+      document.getElementById(
+        "myRank"
+      ).innerText =
+      "#" + (myIndex + 1);
 
-document.getElementById(
-"leaderboard"
-).innerHTML = html;
+      document.getElementById(
+        "myCoins"
+      ).innerText =
+      (users[myIndex].coins || 0) +
+      " Coins";
 
-const {
-data:{user}
-} = await supabase.auth.getUser();
+    }
 
-if(user){
-
-const myIndex =
-users.findIndex(
-u => u.email === user.email
-);
-
-if(myIndex !== -1){
-
-document.getElementById(
-"myRank"
-).innerText =
-"#" + (myIndex + 1);
-
-document.getElementById(
-"myCoins"
-).innerText =
-users[myIndex].coins +
-" Coins";
-
-}
-
-}
+  }
 
 }
 
