@@ -162,119 +162,147 @@ async function loadTasks(){
 
 try{
 
-  // all code
+const {
+data:{ user }
+} = await supabase.auth.getUser();
 
-}catch(err){
+if(!user){
 
-  console.error(err);
+location.href = "login.html";
+return;
 
 }
-}
 
-  const {
-    data:{ user }
-  } = await supabase.auth.getUser();
-
-  if(!user){
-    location.href = "login.html";
-    return;
-  }
-
-  const { data: tasks, error } =
-await supabase
+const {
+data: tasks,
+error
+} = await supabase
 .from("video_tasks")
 .select("task_number")
 .eq("user_id", user.id);
 
 if(error){
-  console.error(error);
-  return;
+
+console.error(error);
+
+document.getElementById(
+"progress"
+).innerHTML =
+"Failed to load tasks";
+
+return;
+
 }
 
-  const completed =
-  tasks
-  ? tasks.map(t => t.task_number)
-  : [];
+const completed =
+tasks
+? tasks.map(t => t.task_number)
+: [];
 
-  for(let i=1;i<=3;i++){
+for(let i = 1; i <= 3; i++){
 
-    const btn =
-    document.getElementById(
-      "task"+i
-    );
+const btn =
+document.getElementById(
+"task" + i
+);
 
-    const status =
-    document.getElementById(
-      "status"+i
-    );
+const status =
+document.getElementById(
+"status" + i
+);
 
-    if(completed.includes(i)){
+if(completed.includes(i)){
 
-      status.innerHTML =
-      "✅ Completed";
+status.innerHTML =
+"✅ Completed";
 
-      btn.disabled = true;
+btn.disabled = true;
 
-      btn.innerText =
-      "Completed";
+btn.innerText =
+"Completed";
 
-    }
+}
 
-  }
+}
 
-  if(
-    !completed.includes(1)
-  ){
+if(!completed.includes(1)){
 
-    document.getElementById("task1").disabled = false;
-document.getElementById("status1").innerHTML =
+document.getElementById(
+"task1"
+).disabled = false;
+
+document.getElementById(
+"status1"
+).innerHTML =
 "🟢 Available";
 
-  }
+}
 
-  if(
-    completed.includes(1)
-    &&
-    !completed.includes(2)
-  ){
+if(
+completed.includes(1)
+&&
+!completed.includes(2)
+){
 
-    document.getElementById("task2").disabled = false;
-document.getElementById("status2").innerHTML =
+document.getElementById(
+"task2"
+).disabled = false;
+
+document.getElementById(
+"status2"
+).innerHTML =
 "🟢 Available";
 
-  }
+}
 
-  if(
-    completed.includes(2)
-    &&
-    !completed.includes(3)
-  ){
+if(
+completed.includes(2)
+&&
+!completed.includes(3)
+){
 
-    document.getElementById("task3").disabled = false;
-document.getElementById("status3").innerHTML =
+document.getElementById(
+"task3"
+).disabled = false;
+
+document.getElementById(
+"status3"
+).innerHTML =
 "🟢 Available";
-  }
 
-  document.getElementById(
-    "progress"
-  ).innerHTML =
-  "🎯 Completed "
-  +
-  completed.length
-  +
-  "/3 Tasks";
+}
+
+document.getElementById(
+"progress"
+).innerHTML =
+"🎯 Completed "
++
+completed.length
++
+"/3 Tasks";
+
+}catch(err){
+
+console.error(err);
+
+document.getElementById(
+"progress"
+).innerHTML =
+"Error loading tasks";
+
+}
 
 }
 
 window.openTask = function(task){
 
-  sessionStorage.setItem(
-    "currentTask",
-    task
-  );
+sessionStorage.setItem(
+"currentTask",
+task
+);
 
-  location.href =
-  "watch-video.html";
+location.href =
+"watch-video.html";
 
 };
 
