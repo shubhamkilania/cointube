@@ -274,9 +274,13 @@ async function loadReferral(){
   profile.referral_code;
 
   const referralLink =
-  window.location.origin +
-  "/register.html?ref=" +
-  profile.referral_code;
+window.location.origin +
+window.location.pathname.replace(
+"referral.html",
+"register.html"
+) +
+"?ref=" +
+profile.referral_code;
 
   document.getElementById(
     "refLink"
