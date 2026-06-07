@@ -1,13 +1,14 @@
 *{
-    margin:100;
-    padding:100;
+    margin:0;
+    padding:0;
     box-sizing:border-box;
 }
 
 body{
-    background:#050505;
+    background:#080811;
     color:white;
     font-family:Arial,sans-serif;
+    min-height:100vh;
 }
 
 .navbar{
@@ -33,7 +34,7 @@ body{
     width:250px;
     height:100%;
     background:#111;
-    transition:0.3s;
+     transition:right .3s ease;
     padding-top:70px;
     z-index:1000;
 }
@@ -95,6 +96,7 @@ button:hover{
 .logo{
     font-size:42px;
     font-weight:900;
+    text-align:center;
     background:linear-gradient(90deg,#7b2cff,#00b7ff,#ffd700);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
@@ -111,7 +113,8 @@ button:hover{
     padding:20px;
 }
 
-input{
+input:focus{
+    outline:2px solid #7b2cff;
     width:100%;
     padding:12px;
     border:none;
