@@ -351,114 +351,162 @@ async function(){
 window.withdrawMoney =
 async function(){
 
-  const upi =
-  document
-  .getElementById("upi")
-  .value
-  .trim();
-
-  const amount =
-  parseFloat(
-    document
-    .getElementById("amount")
-    .value
-  );
-
-  if(!upi){
-
-    alert(
-      "Enter UPI ID"
-    );
-
-    return;
-  }
-
-  if(
-    !amount ||
-    amount <= 0
-  ){
-
-   if(amount < 10){
-
-  alert(
-    "Minimum withdrawal is ₹10"
-  );
-
-  return;
+if(!profile){
+alert("Profile not loaded");
+return;
 }
-  if(amount > profile.money){
 
-    alert(
-      "Insufficient balance"
-    );
+const upi =
+document
+.getElementById("upi")
+.value
+.trim();
 
-    return;
-  }
+const amount =
+parseFloat(
+document
+.getElementById("amount")
+.value
+);
 
-  const {
-    data:{ user }
-  } =
-  await supabase.auth.getUser();
+if(!upi){
 
-  const {
-  error: withdrawError
-} =
+alert(
+"Enter UPI ID"
+);
+
+return;
+
+}
+
+if(
+!upi.includes("@")
+){
+
+alert(
+"Enter valid UPI ID"
+);
+
+return;
+
+}
+
+if(
+!amount ||
+amount <= 0
+){
+
+alert(
+"Enter valid amount"
+);
+
+return;
+
+}
+
+if(
+amount < 10
+){
+
+alert(
+"Minimum withdrawal is ₹10"
+);
+
+return;
+
+}
+
+if(
+amount > Number(profile.money || 0)
+){
+
+alert(
+"Insufficient balance"
+);
+
+return;
+
+}
+
+const {
+data:{ user }
+}
+=
+
+await supabase.auth.getUser();
+
+const {
+error: withdrawError
+}
+=
+
 await supabase
 .from("withdrawals")
 .insert({
 
-  email:user.email,
-  upi:upi,
-  amount:amount,
-  status:"Pending"
+email:user.email,
+upi:upi,
+amount:amount,
+status:"Pending"
 
 });
 
 if(withdrawError){
 
-  alert(
-    "Withdraw request failed"
-  );
+console.error(withdrawError);
 
-  return;
+alert(
+"Withdraw request failed"
+);
+
+return;
+
 }
 
-  const {
-  error: balanceError
-} =
+const {
+error: balanceError
+}
+=
+
 await supabase
 .from("profiles")
 .update({
 
-  money:
-  Number(profile.money) - amount
+money:
+Number(profile.money) -
+amount
 
 })
 .eq("id", profile.id);
 
 if(balanceError){
 
-  alert(
-    "Balance update failed"
-  );
+console.error(balanceError);
 
-  return;
+alert(
+"Balance update failed"
+);
+
+return;
+
 }
 
-  alert(
-    "Withdrawal request submitted"
-  );
+alert(
+"✅ Withdrawal request submitted"
+);
 
-  document.getElementById(
-    "upi"
-  ).value = "";
+document.getElementById(
+"upi"
+).value = "";
 
-  document.getElementById(
-    "amount"
-  ).value = "";
+document.getElementById(
+"amount"
+).value = "";
 
-  loadProfile();
+await loadProfile();
+
 };
+
 
 async function loadHistory(){
 
