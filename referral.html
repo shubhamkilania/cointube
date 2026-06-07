@@ -242,10 +242,11 @@ async function loadReferral(){
     return;
   }
 
-  const { data: profile } =
-  await supabase
+  const {
+    data: profile
+  } = await supabase
   .from("profiles")
-  .select("referral_code,referrals")
+  .select("*")
   .eq("id", user.id)
   .single();
 
@@ -254,23 +255,57 @@ async function loadReferral(){
   ).innerText =
   profile.referral_code;
 
+  const referralLink =
+  window.location.origin +
+  "/register.html?ref=" +
+  profile.referral_code;
+
+  document.getElementById(
+    "refLink"
+  ).innerText =
+  referralLink;
+
+  const {
+    data: team
+  } = await supabase
+  .from("profiles")
+  .select("id")
+  .eq(
+    "referred_by",
+    profile.referral_code
+  );
+
+  const teamSize =
+  team ? team.length : 0;
+
+  document.getElementById(
+    "teamCount"
+  ).innerText =
+  teamSize;
+
+  document.getElementById(
+    "teamBonus"
+  ).innerText =
+  (teamSize * 50) +
+  " Coins";
+
 }
 
 document
 .getElementById("copyBtn")
 .addEventListener("click",()=>{
 
-  const code =
+  const link =
   document.getElementById(
-    "refCode"
+    "refLink"
   ).innerText;
 
   navigator.clipboard.writeText(
-    code
+    link
   );
 
   alert(
-    "Referral code copied!"
+    "Referral link copied!"
   );
 
 });
