@@ -136,11 +136,20 @@ type="password"
 placeholder="Password"
 >
 
-<input
-id="referral"
-type="text"
-placeholder="Referral Code (Optional)"
->
+<div
+id="refInfo"
+style="
+display:none;
+background:#1c1c28;
+padding:14px;
+margin-bottom:15px;
+border-radius:12px;
+color:#ffd700;
+text-align:center;
+">
+Joined via referral:
+<span id="refCodeText"></span>
+</div>
 
 <button id="registerBtn">
 Create Account
@@ -154,6 +163,38 @@ Already have an account?
 </div>
 
 </div>
+
+  <script>
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const ref =
+params.get("ref");
+
+if(ref){
+
+const box =
+document.getElementById(
+"refInfo"
+);
+
+const text =
+document.getElementById(
+"refCodeText"
+);
+
+box.style.display =
+"block";
+
+text.innerText =
+ref;
+
+}
+
+</script>
 
 <script type="module" src="register.js"></script>
 
