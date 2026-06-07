@@ -1,4 +1,14 @@
+
 import { supabase } from "./supabase.js";
+
+const urlParams =
+new URLSearchParams(
+window.location.search
+);
+
+const referredBy =
+urlParams.get("ref") ||
+"SHUB1411";
 
 function generateReferralCode(username){
 
@@ -9,9 +19,9 @@ username
 .toUpperCase();
 
 const randomPart =
-Math.floor(
-1000 + Math.random() * 9000
-);
+Date.now()
+.toString()
+.slice(-4);
 
 return firstPart + randomPart;
 }
@@ -37,111 +47,129 @@ document.getElementById("statusText");
 
 if(!username || !email || !password){
 
-```
 status.innerText =
 "Fill all required fields";
 
 return;
-```
 
 }
 
 try{
 
-```
 status.innerText =
 "Creating account...";
 
 const {
-  data,
-  error
+data,
+error
 } =
 await supabase.auth.signUp({
-  email,
-  password
+email,
+password
 });
 
 if(error) throw error;
 
 if(!data.user){
 
-  status.innerText =
-  "Check your email and verify your account.";
+status.innerText =
+"Check your email and verify your account.";
 
-  return;
+return;
 
 }
 
 const referralCode =
 generateReferralCode(username);
+
 let inviter = null;
 
 if(referredBy){
 
-  const { data: inviterProfile } =
-  await supabase
-  .from("profiles")
-  .select("*")
-  .eq("referral_code", referredBy)
-  .maybeSingle();
+const {
+data: inviterProfile
+} =
+await supabase
+.from("profiles")
+.select("*")
+.eq(
+"referral_code",
+referredBy
+)
+.maybeSingle();
 
-  if(inviterProfile){
+if(inviterProfile){
 
-    inviter = inviterProfile;
+inviter = inviterProfile;
 
-    await supabase
-    .from("profiles")
-    .update({
-      coins:
-      (inviterProfile.coins || 0) + 100,
+await supabase
+.from("profiles")
+.update({
 
-      referrals:
-      (inviterProfile.referrals || 0) + 1
-    })
-    .eq("id", inviterProfile.id);
+coins:
+(inviterProfile.coins || 0) + 100,
 
-  }
+referrals:
+(inviterProfile.referrals || 0) + 1
+
+})
+.eq(
+"id",
+inviterProfile.id
+);
+
+}
 
 }
 
 const {
-  error: profileError
+error: profileError
 } =
 await supabase
 .from("profiles")
 .insert({
-  id:data.user.id,
-  username:username,
-  coins:0,
-  money:0,
-  videos_watched:0,
-  referrals:0,
-  referral_code:referralCode,
-  referred_by: referredBy || null
+
+id:
+data.user.id,
+
+username:
+username,
+
+coins:100,
+
+money:0,
+
+videos_watched:0,
+
+referrals:0,
+
+referral_code:
+referralCode,
+
+referred_by:
+referredBy
+
 });
 
 if(profileError)
 throw profileError;
 
 status.innerText =
-"Account created successfully.";
+"Account created successfully!";
 
 setTimeout(()=>{
 
-  window.location.href =
-  "login.html";
+window.location.href =
+"login.html";
 
 },1500);
-```
 
 }catch(err){
 
-```
 console.error(err);
 
 status.innerText =
 err.message;
-```
 
 }
 
