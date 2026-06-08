@@ -218,7 +218,9 @@ color:#666;
 <div class="topbar">
 
 <div>
-<h1>Welcome Back 👋</h1>
+<h1 id="welcomeText">
+Welcome Back 👋
+</h1>
 <p style="color:#aaa;">
 Complete tasks and earn more coins every day.
 </p>
@@ -395,7 +397,9 @@ async function loadProfile(){
 }
 
 loadProfile();
-
+document.getElementById("welcomeText").innerText =
+`Welcome Back ${profile.username} 👋`;
+  
 </script>
 
 <script type="module" src="auth-check.js"></script>
