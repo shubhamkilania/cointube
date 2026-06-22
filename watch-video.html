@@ -150,14 +150,37 @@ location.href = "login.html";
 return;
 }
 
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
 const {
 data: allTasks,
 error
 } =
 await supabase
 .from("video_tasks")
-.select("task_number")
+.select("*")
 .eq("user_id", user.id);
+
+const completedToday =
+(allTasks || [])
+.filter(task => {
+
+const taskDate =
+new Date(task.completed_at)
+.toISOString()
+.split("T")[0];
+
+return taskDate === today;
+
+});
+
+const completed =
+completedToday.map(
+t => t.task_number
+);
 
 if(error){
 console.error(error);
@@ -267,6 +290,11 @@ location.href =
 return;
 }
 
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
 const {
 data: alreadyDone,
 error: alreadyDoneError
@@ -277,13 +305,24 @@ await supabase
 .eq("user_id", user.id)
 .eq("task_number", currentTask);
 
+const completedToday =
+(alreadyDone || [])
+.filter(task => {
+
+const taskDate =
+new Date(task.completed_at)
+.toISOString()
+.split("T")[0];
+
+return taskDate === today;
+
+});
 if(alreadyDoneError){
 throw alreadyDoneError;
 }
 
 if(
-alreadyDone &&
-alreadyDone.length > 0
+completedToday.length > 0
 ){
 alert(
 "Task already completed"
