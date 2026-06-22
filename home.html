@@ -394,11 +394,12 @@ async function loadProfile(){
   document.getElementById("refCount").innerText =
   profile.referrals || 0;
 
+  document.getElementById("welcomeText").innerText =
+`Welcome Back ${profile.username} 👋`;
+  
 }
 
 loadProfile();
-document.getElementById("welcomeText").innerText =
-`Welcome Back ${profile.username} 👋`;
   
 </script>
 
