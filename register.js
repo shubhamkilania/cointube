@@ -19,9 +19,9 @@ username
 .toUpperCase();
 
 const randomPart =
-Date.now()
-.toString()
-.slice(-4);
+Math.floor(
+1000 + Math.random() * 9000
+);
 
 return firstPart + randomPart;
 }
